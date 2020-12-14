@@ -23,10 +23,6 @@ dependencies {
         isTransitive = true
     }
     implementation("us.fatehi:schemacrawler:16.11.6")
-    /*implementation("org.springframework.shell", "spring-shell-core", "2.0.1.RELEASE")
-    implementation("org.springframework.shell", "spring-shell-standard", "2.0.1.RELEASE")
-    implementation("org.springframework.shell", "spring-shell-table", "2.0.1.RELEASE")
-    implementation("org.springframework.shell", "spring-shell-standard-commands", "2.0.1.RELEASE")*/
     implementation("org.springframework.shell", "spring-shell-starter", "2.0.1.RELEASE")
     implementation("org.springframework.boot", "spring-boot-starter", "2.4.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
