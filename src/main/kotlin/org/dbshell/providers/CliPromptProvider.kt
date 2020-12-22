@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component
 @Component
 class CliPromptProvider: PromptProvider {
     override fun getPrompt(): AttributedString {
-        return AttributedString("CLI-DEMO:>", AttributedStyle.DEFAULT.foreground(AttributedStyle.BLUE))
+        return AttributedString("db-shell:>", AttributedStyle.DEFAULT.foreground(AttributedStyle.BLUE))
     }
 }

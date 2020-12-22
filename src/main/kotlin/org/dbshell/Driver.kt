@@ -12,7 +12,8 @@ class Driver {
     }
 
     fun start(args: Array<String>) {
-        SpringApplication.run(Driver::class.java, *args)
+        val app = SpringApplication(Driver::class.java)
+        app.run(*args)
     }
 }
 
