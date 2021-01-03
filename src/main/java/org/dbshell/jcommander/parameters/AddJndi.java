@@ -1,6 +1,10 @@
 package org.dbshell.jcommander.parameters;
 
+import com.beust.jcommander.DynamicParameter;
+import com.beust.jcommander.Parameters;
 import com.beust.jcommander.SubParameter;
+
+import java.util.Map;
 
 public class AddJndi {
     @SubParameter(order = 0)

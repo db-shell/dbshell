@@ -33,6 +33,11 @@ tasks.create("set-defaults") {
 
         group = "org.dbshell"
         version = softwareVersion
+
+        val source = File("version.properties")
+        val dest = File("src/deploy/lib/conf/version.properties")
+
+        org.apache.commons.io.FileUtils.copyFile(source, dest)
     }
     doLast {
         println("Current software version is $version")
@@ -41,6 +46,25 @@ tasks.create("set-defaults") {
 
 tasks.build {
     dependsOn("set-defaults")
+}
+
+tasks.named<CreateStartScripts>("startScripts") {
+    classpath = files(classpath)
+}
+
+
+
+distributions {
+    getByName("main") {
+        contents {
+            from("src/deploy/bin/conf/jndi") {
+                into("conf/jndi")
+            }
+            from("src/deploy/lib/conf") {
+                into("conf")
+            }
+        }
+    }
 }
 
 //Sample gradle CLI: gradle release -Prelease.useAutomaticVersion=true
