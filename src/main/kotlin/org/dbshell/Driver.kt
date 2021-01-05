@@ -3,19 +3,22 @@ package org.dbshell
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.SpringApplication
+import java.io.File
 import java.lang.IllegalStateException
 import javax.naming.Context
-import javax.naming.InitialContext
 
 @SpringBootApplication
 class Driver {
 
     init {
-        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.osjava.sj.SimpleContextFactory")
-        System.setProperty("org.osjava.sj.jndi.shared", "true")
-        System.setProperty("org.osjava.sj.root", "src/deploy/bin/conf/jndi")
-        System.setProperty("org.osjava.sj.colon.replace", "--")
-        System.setProperty("org.osjava.sj.delimiter", "/")
+        //System.setProperty("org.jline.terminal.dumb", "true")
+        if(!File("conf/jndi.properties").isFile) {
+            System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.osjava.sj.SimpleContextFactory")
+            System.setProperty("org.osjava.sj.jndi.shared", "true")
+            System.setProperty("org.osjava.sj.root", "src/deploy/bin/conf/jndi")
+            System.setProperty("org.osjava.sj.colon.replace", "--")
+            System.setProperty("org.osjava.sj.delimiter", "/")
+        }
     }
 
     companion object {

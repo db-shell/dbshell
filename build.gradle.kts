@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Properties
+import org.apache.commons.io.FileUtils
 
 plugins {
     kotlin("jvm") version "1.4.10"
@@ -49,10 +50,18 @@ tasks.build {
 }
 
 tasks.named<CreateStartScripts>("startScripts") {
-    classpath = files(classpath)
+    classpath = files(classpath) + files("conf")
+    //This is a HACK....as seen here:  https://discuss.gradle.org/t/classpath-in-application-plugin-is-building-always-relative-to-app-home-lib-directory/2012
+    doLast {
+        var windowsScriptFile = FileUtils.readFileToString(windowsScript, "UTF-8")
+        var unixScriptFile = FileUtils.readFileToString(unixScript, "UTF-8")
+        val windowsScriptContent = windowsScriptFile.replace("%APP_HOME%\\lib\\conf", "%APP_HOME%\\conf")
+        val unixScriptContent = unixScriptFile.replace("\$APP_HOME/lib/conf", "\$APP_HOME/conf")
+        FileUtils.writeStringToFile(windowsScript, windowsScriptContent, "UTF-8", false)
+        FileUtils.writeStringToFile(unixScript, unixScriptContent, "UTF-8", false)
+    }
+
 }
-
-
 
 distributions {
     getByName("main") {
@@ -93,13 +102,11 @@ dependencies {
     }
     implementation("us.fatehi:schemacrawler:16.11.6")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion)
-    implementation("org.springframework.shell", "spring-shell-jcommander-adapter", springVersion)
     implementation("org.springframework.boot", "spring-boot-starter", "2.4.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.apache.logging.log4j",  "log4j-core",  log4jVersion)
     implementation("org.apache.logging.log4j",  "log4j-api",  log4jVersion)
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
-    implementation("com.beust:jcommander:1.78")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation(kotlin("test-junit"))
