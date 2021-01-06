@@ -104,6 +104,7 @@ dependencies {
     implementation("org.springframework.shell", "spring-shell-starter", springVersion)
     implementation("org.springframework.boot", "spring-boot-starter", "2.4.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.logging.log4j",  "log4j-core",  log4jVersion)
     implementation("org.apache.logging.log4j",  "log4j-api",  log4jVersion)
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)

@@ -1,12 +1,8 @@
 package org.dbshell.commands.connections
 
-import org.springframework.shell.standard.ShellComponent
-import org.springframework.shell.standard.ShellMethod
-import org.springframework.shell.standard.ShellOption
 import org.bradfordmiller.simplejndiutils.JNDIUtils
-import org.dbshell.Driver
 import org.slf4j.LoggerFactory
-import javax.validation.Valid
+import org.springframework.shell.standard.*
 
 @ShellComponent
 class JndiManager {
@@ -16,7 +12,14 @@ class JndiManager {
     }
 
     @ShellMethod("Add Database Connection")
-    fun addConnection(jndi: String, context: String, url: String, driver: String, user: String, password: String) {
+    fun addConnection(
+        jndi: String,
+        @ShellOption(valueProvider = ContextValueProvider::class) context: String,
+        url: String,
+        driver: String,
+        user: String,
+        password: String
+    ) {
 
         val params = HashMap<String, String>()
         params.put("type", "javax.sql.DataSource")
@@ -29,7 +32,7 @@ class JndiManager {
             val success = JNDIUtils.addJndiConnection(jndi, context, params)
             if (success) {
                 logger.info(
-                    """Jndi entry ${jndi} for context ${context}
+                    """Jndi entry $jndi for context $context
                             |successfully added.""".trimMargin()
                 )
             } else {
