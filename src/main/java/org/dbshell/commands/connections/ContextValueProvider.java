@@ -1,5 +1,6 @@
 package org.dbshell.commands.connections;
 
+import org.apache.commons.io.FilenameUtils;
 import org.bradfordmiller.simplejndiutils.JNDIUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.shell.CompletionContext;
@@ -30,7 +31,7 @@ class ContextValueProvider extends ValueProviderSupport {
                 JNDIUtils.getAvailableJndiContexts(null)
                  .stream()
                  .filter(c -> c.contains(currentInput))
-                 .map(p -> new File(p).getName())
+                 .map(p -> FilenameUtils.removeExtension(new File(p).getName()))
                  .map(CompletionProposal::new)
                  .collect(Collectors.toList());
 
