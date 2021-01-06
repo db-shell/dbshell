@@ -3,6 +3,14 @@ package org.dbshell.commands.connections
 import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.*
+import javax.naming.InitialContext
+import org.springframework.shell.table.TableBuilder
+
+import org.springframework.shell.table.ArrayTableModel
+import org.springframework.shell.table.BeanListTableModel
+import org.springframework.shell.table.BorderStyle
+
+data class JndiEntries(val key: String, val value: String)
 
 @ShellComponent
 class JndiManager {
@@ -39,6 +47,31 @@ class JndiManager {
             }
         } catch (e: Exception) {
             logger.error("Exception occurred while adding jndi entry: ${e.message}")
+            throw e
+        }
+    }
+
+    @ShellMethod("List database entries from a context")
+    fun listEntries(@ShellOption(valueProvider = ContextValueProvider::class) context: String) {
+
+        try {
+            val initCtx = InitialContext()
+            val mc = JNDIUtils.getMemoryContextFromInitContext(initCtx, context)
+            val entries = JNDIUtils.getEntriesForJndiContext(mc).map{kvp -> JndiEntries(kvp.key, kvp.value)}.toList()
+
+            val headers = LinkedHashMap<String, Any>()
+            headers["key"] = "Jndi Entry"
+            headers["value"] = "Value"
+
+            val model = BeanListTableModel(entries, headers)
+            val tableBuilder = TableBuilder(model)
+            tableBuilder.addInnerBorder(BorderStyle.fancy_light);
+            tableBuilder.addHeaderBorder(BorderStyle.fancy_double);
+
+            println(tableBuilder.build().render(80))
+
+        } catch(e: Exception) {
+            logger.error("Error when accessing entries for context $context: ${e.message}")
             throw e
         }
     }
