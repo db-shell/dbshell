@@ -16,11 +16,6 @@ import java.io.File;
 
 @Component
 class ContextValueProvider extends ValueProviderSupport {
-    
-    @Override
-    public boolean supports(MethodParameter parameter, CompletionContext completionContext) {
-        return true;
-    }
 
     @Override
     public List<CompletionProposal> complete(MethodParameter parameter, CompletionContext completionContext, String[] hints) {

@@ -6,7 +6,6 @@ import org.springframework.shell.standard.*
 import javax.naming.InitialContext
 import org.springframework.shell.table.TableBuilder
 
-import org.springframework.shell.table.ArrayTableModel
 import org.springframework.shell.table.BeanListTableModel
 import org.springframework.shell.table.BorderStyle
 
@@ -72,6 +71,21 @@ class JndiManager {
 
         } catch(e: Exception) {
             logger.error("Error when accessing entries for context $context: ${e.message}")
+            throw e
+        }
+    }
+
+    @ShellMethod("Get details for a context and jndi")
+    fun getDetails(
+        @ShellOption(valueProvider = ContextValueProvider::class) context: String,
+        @ShellOption(valueProvider = JndiValueProvider::class) jndi: String
+        ) {
+        try {
+            val initCtx = InitialContext()
+            val entry = JNDIUtils.getDetailsforJndiEntry(initCtx, context, jndi)
+            println(entry)
+        } catch(e: Exception) {
+            logger.error("Error when getting details for context $context and jndi $jndi: ${e.message}")
             throw e
         }
     }
