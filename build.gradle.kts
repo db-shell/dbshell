@@ -72,6 +72,9 @@ distributions {
             from("src/deploy/lib/conf") {
                 into("conf")
             }
+            from("src/deploy/bin/data") {
+                into("data")
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package org.dbshell.commands.connections
 
 import org.bradfordmiller.simplejndiutils.JNDIUtils
+import org.dbshell.environment.EnvironmentVars
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.*
 import javax.naming.InitialContext
@@ -8,6 +9,7 @@ import org.springframework.shell.table.TableBuilder
 
 import org.springframework.shell.table.BeanListTableModel
 import org.springframework.shell.table.BorderStyle
+import java.sql.SQLException
 
 data class JndiEntries(val key: String, val value: String)
 
@@ -52,7 +54,6 @@ class JndiManager {
 
     @ShellMethod("List database entries from a context")
     fun listEntries(@ShellOption(valueProvider = ContextValueProvider::class) context: String) {
-
         try {
             val initCtx = InitialContext()
             val mc = JNDIUtils.getMemoryContextFromInitContext(initCtx, context)
@@ -87,6 +88,29 @@ class JndiManager {
         } catch(e: Exception) {
             logger.error("Error when getting details for context $context and jndi $jndi: ${e.message}")
             throw e
+        }
+    }
+
+    @ShellMethod("Set the current active shell connection with a context and jndi")
+    fun setActiveConnection(
+        @ShellOption(valueProvider = ContextValueProvider::class) context: String,
+        @ShellOption(valueProvider = JndiValueProvider::class) jndi: String
+    ) {
+        System.setProperty("currentContext", context)
+        System.setProperty("currentJndi", jndi)
+        println("Set current connection to context $context and jndi $jndi")
+    }
+
+    @ShellMethod("Validate the active connection")
+    fun validateActiveConnection() {
+        val (envContext, envJndi) = EnvironmentVars.getCurrentContextAndJndi()
+        try {
+            val ds = JNDIUtils.getDataSource(envJndi, envContext).left
+            ds.connection
+            println("Successfully validated current active connection.")
+        } catch (sqlEx: Exception) {
+            val message = "Error when creating connection to context $envContext and jndi $envJndi: ${sqlEx.message}"
+            logger.error(message)
         }
     }
 }

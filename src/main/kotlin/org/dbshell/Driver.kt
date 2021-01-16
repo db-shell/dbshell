@@ -5,13 +5,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.SpringApplication
 import java.io.File
 import java.lang.IllegalStateException
+import java.util.logging.LogManager
 import javax.naming.Context
 
 @SpringBootApplication
 class Driver {
 
     init {
-        //System.setProperty("org.jline.terminal.dumb", "true")
         if(!File("conf/jndi.properties").isFile) {
             System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.osjava.sj.SimpleContextFactory")
             System.setProperty("org.osjava.sj.jndi.shared", "true")
@@ -36,5 +36,6 @@ class Driver {
 }
 
 fun main(args: Array<String>) {
+    LogManager.getLogManager().reset()
     Driver().start(args)
 }
