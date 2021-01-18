@@ -1,6 +1,7 @@
 package org.dbshell.commands.connections
 
 import org.bradfordmiller.simplejndiutils.JNDIUtils
+import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.*
@@ -9,7 +10,6 @@ import org.springframework.shell.table.TableBuilder
 
 import org.springframework.shell.table.BeanListTableModel
 import org.springframework.shell.table.BorderStyle
-import java.sql.SQLException
 
 data class JndiEntries(val key: String, val value: String)
 
@@ -96,8 +96,8 @@ class JndiManager {
         @ShellOption(valueProvider = ContextValueProvider::class) context: String,
         @ShellOption(valueProvider = JndiValueProvider::class) jndi: String
     ) {
-        System.setProperty("currentContext", context)
-        System.setProperty("currentJndi", jndi)
+        EnvironmentVars.setCurrentContextAndJndi(context, jndi)
+        EnvironmentProps.setCurrentContextandJndi(context, jndi)
         println("Set current connection to context $context and jndi $jndi")
     }
 

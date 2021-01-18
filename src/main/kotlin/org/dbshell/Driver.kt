@@ -1,5 +1,7 @@
 package org.dbshell
 
+import org.dbshell.environment.EnvironmentProps
+import org.dbshell.environment.EnvironmentVars
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.SpringApplication
@@ -19,6 +21,8 @@ class Driver {
             System.setProperty("org.osjava.sj.colon.replace", "--")
             System.setProperty("org.osjava.sj.delimiter", "/")
         }
+        val (currentContext, currentJndi) = EnvironmentProps.getCurrentContextAndJndi()
+        EnvironmentVars.setCurrentContextAndJndi(currentContext, currentJndi)
     }
 
     companion object {
