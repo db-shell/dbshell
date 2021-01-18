@@ -10,11 +10,12 @@ import org.springframework.shell.table.TableBuilder
 
 import org.springframework.shell.table.BeanListTableModel
 import org.springframework.shell.table.BorderStyle
-
-data class JndiEntries(val key: String, val value: String)
+import java.util.*
 
 @ShellComponent
 class JndiManager {
+
+    data class JndiEntries(val key: String, val value: String)
 
     companion object {
         private val logger = LoggerFactory.getLogger(JndiManager::class.java)
@@ -65,8 +66,8 @@ class JndiManager {
 
             val model = BeanListTableModel(entries, headers)
             val tableBuilder = TableBuilder(model)
-            tableBuilder.addInnerBorder(BorderStyle.fancy_light);
-            tableBuilder.addHeaderBorder(BorderStyle.fancy_double);
+            tableBuilder.addInnerBorder(BorderStyle.fancy_light)
+            tableBuilder.addHeaderBorder(BorderStyle.fancy_double)
 
             println(tableBuilder.build().render(80))
 
