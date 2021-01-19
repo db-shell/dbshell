@@ -9,15 +9,15 @@ class EnvironmentProps {
         private val f = File("conf/settings.properties")
         private val exists = f.exists()
 
-        fun getCurrentContextAndJndi(): Pair<String, String> {
+        fun getCurrentContextAndJndi(): ContextAndJndi {
             if(exists) {
                 val p = Properties()
                 f.inputStream().use { fis ->
                     p.load(fis)
-                    return Pair(p.getProperty("currentContext"), p.getProperty("currentJndi"))
+                    return ContextAndJndi(p.getProperty("currentContext"), p.getProperty("currentJndi"))
                 }
             } else {
-                return Pair("", "")
+                return ContextAndJndi("", "")
             }
         }
         fun setCurrentContextandJndi(context: String, jndi: String) {

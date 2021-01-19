@@ -2,10 +2,10 @@ package org.dbshell.environment
 
 class EnvironmentVars {
     companion object {
-        fun getCurrentContextAndJndi(): Pair<String, String> {
+        fun getCurrentContextAndJndi(): ContextAndJndi {
             val envContext = System.getProperty("currentContext")
             val envJndi = System.getProperty("currentJndi")
-            return Pair(envContext, envJndi)
+            return ContextAndJndi(envContext, envJndi)
         }
         fun setCurrentContextAndJndi(context: String, jndi: String) {
             if(context != null)

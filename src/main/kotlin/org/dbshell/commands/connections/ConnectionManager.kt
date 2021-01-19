@@ -2,13 +2,14 @@ package org.dbshell.commands.connections
 
 import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.dbshell.environment.EnvironmentVars
+import org.dbshell.reflection.utils.DatabaseMetadataUtil
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
+import org.springframework.shell.standard.ShellOption
 import org.springframework.shell.table.BeanListTableModel
 import org.springframework.shell.table.BorderStyle
 import org.springframework.shell.table.TableBuilder
-import java.lang.reflect.Modifier
 import java.sql.SQLException
 import java.util.*
 
@@ -19,72 +20,76 @@ class ConnectionManager {
 
     companion object {
         private val logger = LoggerFactory.getLogger(ConnectionManager::class.java)
-    }
-    @ShellMethod("Get active connection information")
-    fun getCurrentConnectionInfo() {
-        val (envContext, envJndi) = EnvironmentVars.getCurrentContextAndJndi()
-        try {
-            val connection = JNDIUtils.getJndiConnection(envJndi, envContext)
-            val dbmd = connection.metaData
 
-            val klazz = dbmd::class.java
-            val methodList =
-                klazz.methods.filter {m ->
-                    val modifiers = m.modifiers
-                    (m.name != "toString" || m.name != "hashCode") &&
-                    m.parameterCount == 0 &&
-                    Modifier.isPublic(modifiers) &&
-                    (m.returnType == String::class.javaObjectType ||
-                     m.returnType == Integer::class.javaPrimitiveType ||
-                     m.returnType == Boolean::class.javaPrimitiveType
-                    )
-                }
+        private fun getFormattedPrimitivesFromDbMetadata(): Set<ConnectionEntries> {
 
-            val entries =
-                methodList.map {m ->
+            val (envContext, envJndi) = EnvironmentVars.getCurrentContextAndJndi()
+
+            return try {
+
+                val connection = JNDIUtils.getJndiConnection(envJndi, envContext)
+                val dbmd = connection.metaData
+                val methodList = DatabaseMetadataUtil.getPrimitivesFromDBMetadata(dbmd)
+
+                methodList.map { m ->
                     val retval =
                         try {
-                            m.invoke(dbmd)
-                        } catch(ex: Exception) {
+                            m.value.invoke(dbmd)
+                        } catch (ex: Exception) {
                             "Not Supported by this driver"
                         }
 
-                        val name =
-                            m.name
-                                .replace("get", "")
-                                .replace("JDBC", "Jdbc")
-                                .replace("SQL", "Sql")
-                                .replace("URL", "Url")
-
-                       val formattedName = name.trim().first().toUpperCase() + name.substring(1, name.length)
-
-                    if(retval == null)
-                        ConnectionEntries(name, "")
+                    if (retval == null)
+                        ConnectionEntries(m.key, "")
                     else {
                         val formattedRetval =
-                            if(retval.toString().length > 77) {
+                            if (retval.toString().length > 77) {
                                 retval.toString().substring(0, 77) + "..."
                             } else {
                                 retval.toString()
                             }
-                        ConnectionEntries(formattedName, formattedRetval)
+                        ConnectionEntries(m.key, formattedRetval)
                     }
-                }.sortedBy{e -> e.key}
+                }.sortedBy { e -> e.key }.toSet()
+            } catch (sqlEx: SQLException) {
+                val message =
+                    "Error when creating connection to context $envContext and jndi $envJndi: ${sqlEx.message}"
+                logger.error(message)
+                throw sqlEx
+            }
+        }
 
+        private fun <T> renderAttributeTable(iter: Iterable<T>) {
             val headers = LinkedHashMap<String, Any>()
             headers["key"] = "Connection Property"
             headers["value"] = "Value"
 
-            val model = BeanListTableModel(entries, headers)
+            val model = BeanListTableModel(iter, headers)
             val tableBuilder = TableBuilder(model)
             tableBuilder.addInnerBorder(BorderStyle.fancy_light)
             tableBuilder.addHeaderBorder(BorderStyle.fancy_double)
-
             println(tableBuilder.build().render(80))
+        }
+    }
 
-        } catch (sqlEx: Exception) {
-            val message = "Error when creating connection to context $envContext and jndi $envJndi: ${sqlEx.message}"
-            logger.error(message)
+    @ShellMethod("Get active connection information")
+    fun getCurrentConnectionInfo() {
+        try {
+            val entries = getFormattedPrimitivesFromDbMetadata()
+            renderAttributeTable(entries)
+        } catch (ex: Exception) {
+            println("Error getting current connection information: ${ex.message}")
+        }
+    }
+
+    @ShellMethod("Get specific attribute of active connection information")
+    fun getCurrentConnectionAttributeInfo(@ShellOption(valueProvider = DatabaseMdPrimitiveProvider::class) attributeName: String) {
+        try {
+            val entries = getFormattedPrimitivesFromDbMetadata()
+            val entryAttribute = entries.filter {ce -> ce.key == attributeName}
+            renderAttributeTable(entryAttribute)
+        } catch (ex: Exception) {
+            println("Error getting current connection information: ${ex.message}")
         }
     }
 }
