@@ -92,4 +92,17 @@ class ConnectionManager {
             println("Error getting current connection information: ${ex.message}")
         }
     }
+
+    @ShellMethod("List Schemas in database of active connection")
+    fun getAllSchemas() {
+        try {
+            val (envContext, envJndi) = EnvironmentVars.getCurrentContextAndJndi()
+            val connection = JNDIUtils.getJndiConnection(envJndi, envContext)
+            val dbmd = connection.metaData
+            val entries = DatabaseMetadataUtil.getSchemas(dbmd)
+            renderAttributeTable(entries)
+        } catch (ex: Exception) {
+            println("Error getting current connection information: ${ex.message}")
+        }
+    }
 }
