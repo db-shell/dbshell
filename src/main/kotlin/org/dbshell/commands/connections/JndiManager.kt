@@ -3,13 +3,11 @@ package org.dbshell.commands.connections
 import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
+import org.dbshell.ui.TablesUtil
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.*
 import javax.naming.InitialContext
-import org.springframework.shell.table.TableBuilder
 
-import org.springframework.shell.table.BeanListTableModel
-import org.springframework.shell.table.BorderStyle
 import java.util.*
 
 @ShellComponent
@@ -64,12 +62,7 @@ class JndiManager {
             headers["key"] = "Jndi Entry"
             headers["value"] = "Value"
 
-            val model = BeanListTableModel(entries, headers)
-            val tableBuilder = TableBuilder(model)
-            tableBuilder.addInnerBorder(BorderStyle.fancy_light)
-            tableBuilder.addHeaderBorder(BorderStyle.fancy_double)
-
-            println(tableBuilder.build().render(80))
+            TablesUtil.renderAttributeTable(headers, entries)
 
         } catch(e: Exception) {
             logger.error("Error when accessing entries for context $context: ${e.message}")

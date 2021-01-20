@@ -49,12 +49,25 @@ public class DatabaseMetadataUtil {
     public static List<Schema> getSchemas(DatabaseMetaData dbmd) throws SQLException {
         try {
             ResultSet rs = dbmd.getSchemas();
-            ResultSetMetaData rsmd = rs.getMetaData();
             List<Schema> schemaList = new ArrayList<>();
 
-            // Display the result set data.
             while (rs.next()) {
                 schemaList.add(new Schema(rs.getString(1), rs.getString(2)));
+            }
+            rs.close();
+            return schemaList;
+        } catch (SQLException sqlEx) {
+            throw sqlEx;
+        }
+    }
+
+    public static List<String> getCatalogs(DatabaseMetaData dbmd) throws SQLException {
+        try {
+            ResultSet rs = dbmd.getCatalogs();
+            List<String> schemaList = new ArrayList<>();
+
+            while (rs.next()) {
+                schemaList.add(rs.getString(1));
             }
             rs.close();
             return schemaList;

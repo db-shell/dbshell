@@ -3,13 +3,12 @@ package org.dbshell.commands.connections
 import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.reflection.utils.DatabaseMetadataUtil
+import org.dbshell.ui.TablesUtil
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
-import org.springframework.shell.table.BeanListTableModel
-import org.springframework.shell.table.BorderStyle
-import org.springframework.shell.table.TableBuilder
+import java.sql.Connection
 import java.sql.SQLException
 import java.util.*
 
@@ -18,16 +17,34 @@ class ConnectionManager {
 
     data class ConnectionEntries(val key: String, val value: String)
 
+    val connectionHeaders = LinkedHashMap<String, Any>()
+    val schemaHeaders = LinkedHashMap<String, Any>()
+    val catalogHeaders = LinkedHashMap<String, Any>()
+
+    init {
+        connectionHeaders["key"] = "Connection Property"
+        connectionHeaders["value"] = "Value"
+
+        schemaHeaders["key"] = "Schema"
+        schemaHeaders["value"] = "Catalog"
+
+        catalogHeaders["key"] = "Catalog"
+    }
+
     companion object {
         private val logger = LoggerFactory.getLogger(ConnectionManager::class.java)
 
+        private fun getConnectionFromCurrentContextJndi(): Triple<String, String, Connection> {
+            val (envContext, envJndi) = EnvironmentVars.getCurrentContextAndJndi()
+            return Triple(envContext, envJndi,  JNDIUtils.getJndiConnection(envJndi, envContext))
+        }
+
         private fun getFormattedPrimitivesFromDbMetadata(): Set<ConnectionEntries> {
 
-            val (envContext, envJndi) = EnvironmentVars.getCurrentContextAndJndi()
+            val (envContext, envJndi, connection) = getConnectionFromCurrentContextJndi()
 
             return try {
 
-                val connection = JNDIUtils.getJndiConnection(envJndi, envContext)
                 val dbmd = connection.metaData
                 val methodList = DatabaseMetadataUtil.getPrimitivesFromDBMetadata(dbmd)
 
@@ -58,25 +75,13 @@ class ConnectionManager {
                 throw sqlEx
             }
         }
-
-        private fun <T> renderAttributeTable(iter: Iterable<T>) {
-            val headers = LinkedHashMap<String, Any>()
-            headers["key"] = "Connection Property"
-            headers["value"] = "Value"
-
-            val model = BeanListTableModel(iter, headers)
-            val tableBuilder = TableBuilder(model)
-            tableBuilder.addInnerBorder(BorderStyle.fancy_light)
-            tableBuilder.addHeaderBorder(BorderStyle.fancy_double)
-            println(tableBuilder.build().render(80))
-        }
     }
 
     @ShellMethod("Get active connection information")
     fun getCurrentConnectionInfo() {
         try {
             val entries = getFormattedPrimitivesFromDbMetadata()
-            renderAttributeTable(entries)
+            TablesUtil.renderAttributeTable(connectionHeaders, entries)
         } catch (ex: Exception) {
             println("Error getting current connection information: ${ex.message}")
         }
@@ -87,22 +92,29 @@ class ConnectionManager {
         try {
             val entries = getFormattedPrimitivesFromDbMetadata()
             val entryAttribute = entries.filter {ce -> ce.key == attributeName}
-            renderAttributeTable(entryAttribute)
+            TablesUtil.renderAttributeTable(connectionHeaders, entryAttribute)
         } catch (ex: Exception) {
             println("Error getting current connection information: ${ex.message}")
         }
     }
 
-    @ShellMethod("List Schemas in database of active connection")
+    @ShellMethod("List Schemas in active connections database")
     fun getAllSchemas() {
         try {
-            val (envContext, envJndi) = EnvironmentVars.getCurrentContextAndJndi()
-            val connection = JNDIUtils.getJndiConnection(envJndi, envContext)
+            val (_, _, connection) = getConnectionFromCurrentContextJndi()
             val dbmd = connection.metaData
             val entries = DatabaseMetadataUtil.getSchemas(dbmd)
-            renderAttributeTable(entries)
+            TablesUtil.renderAttributeTable(schemaHeaders, entries)
         } catch (ex: Exception) {
             println("Error getting current connection information: ${ex.message}")
         }
+    }
+
+    @ShellMethod("List all catalogs in active connections database")
+    fun getAllCatalogs() {
+        val (_, _, connection) = getConnectionFromCurrentContextJndi()
+        val dbmd = connection.metaData
+        val entries = DatabaseMetadataUtil.getCatalogs(dbmd)
+        TablesUtil.renderAttributeTable(catalogHeaders, entries)
     }
 }
