@@ -40,4 +40,14 @@ class DatabaseManager {
             EnvironmentProps.setCurrentCatalog(catalog)
         }
     }
+
+    @ShellMethod("List all tables for the active connection and catalog")
+    fun getTables() {
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
+            val dbmd = connection.metaData
+            val currentCatalog = EnvironmentVars.getCurrentCatalog()
+            val tableList = DatabaseMetadata.getTables(dbmd, currentCatalog)
+            tableList.forEach{t -> println(t)}
+        }
+    }
 }

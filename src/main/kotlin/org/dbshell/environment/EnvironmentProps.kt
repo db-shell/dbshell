@@ -21,12 +21,15 @@ class EnvironmentProps {
             }
         }
         fun setCurrentContextandJndi(context: String, jndi: String) {
-            if(exists) {
-                f.outputStream().use {fos ->
+            if (exists) {
+                f.inputStream().use { fis ->
                     val p = Properties()
+                    p.load(fis)
                     p.setProperty("currentContext", context)
                     p.setProperty("currentJndi", jndi)
-                    p.store(fos, null)
+                    f.outputStream().use { fos ->
+                        p.store(fos, null)
+                    }
                 }
             }
         }
@@ -43,10 +46,13 @@ class EnvironmentProps {
         }
         fun setCurrentCatalog(catalog: String) {
             if(exists) {
-                f.outputStream().use {fos ->
+                f.inputStream().use {fis ->
                     val p = Properties()
+                    p.load(fis)
                     p.setProperty("currentCatalog", catalog)
-                    p.store(fos, null)
+                    f.outputStream().use {fos ->
+                        p.store(fos, null)
+                    }
                 }
             }
         }

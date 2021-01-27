@@ -39,5 +39,18 @@ public class DatabaseMetadata {
         }
     }
 
+    public static List<String> getTables(DatabaseMetaData dbmd, String catalog) throws SQLException {
+        try {
+            ResultSet rs = dbmd.getTables(catalog, null, null, null);
+            List<String> tableList = new ArrayList<>();
 
+            while (rs.next()) {
+                tableList.add(rs.getString(3));
+            }
+            rs.close();
+            return tableList;
+        } catch (SQLException sqlEx) {
+            throw sqlEx;
+        }
+    }
 }
