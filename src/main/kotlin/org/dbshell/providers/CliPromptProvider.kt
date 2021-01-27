@@ -9,11 +9,28 @@ import org.springframework.stereotype.Component
 @Component
 class CliPromptProvider: PromptProvider {
     override fun getPrompt(): AttributedString {
-        val (envContext, envJndi) = EnvironmentVars.getCurrentContextAndJndi()
+        val contextAndJndi = EnvironmentVars.getCurrentContextAndJndi()
+        val catalog = EnvironmentVars.getCurrentCatalog()
 
-        val currentContext = if(envContext == null) "context:Not Set" else "context:$envContext"
-        val currentJndi = if(envContext == null || envJndi == null) "jndi:Not Set" else "jndi:$envJndi"
+        val currentContext =
+            if(contextAndJndi.context == null)
+                "context:Not Set"
+            else
+                "context:${contextAndJndi.context}"
 
-        return AttributedString("db-shell $currentContext::$currentJndi :>", AttributedStyle.DEFAULT.foreground(AttributedStyle.BLUE))
+        val currentJndi =
+            if(contextAndJndi.context == null || contextAndJndi.jndi == null)
+                "jndi:Not Set"
+            else
+                "jndi:${contextAndJndi.jndi}"
+
+        val currentCatalog =
+            if(catalog.isNullOrEmpty()) {
+                "catalog:Not Set"
+            } else {
+                "catalog:$catalog"
+            }
+
+        return AttributedString("db-shell $currentContext::$currentJndi::$currentCatalog :>", AttributedStyle.DEFAULT.foreground(AttributedStyle.BLUE))
     }
 }

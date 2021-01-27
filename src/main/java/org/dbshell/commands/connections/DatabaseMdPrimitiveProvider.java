@@ -24,7 +24,7 @@ public class DatabaseMdPrimitiveProvider extends ValueProviderSupport {
     public List<CompletionProposal> complete(MethodParameter parameter, CompletionContext completionContext, String[] hints) {
         String currentInput = completionContext.currentWordUpToCursor();
 
-        ContextAndJndi ctxJndi = EnvironmentVars.Companion.getCurrentContextAndJndi();
+        ContextAndJndi ctxJndi = EnvironmentVars.getCurrentContextAndJndi();
         DatabaseMetaData dbmd = null;
         try {
             Connection connection = JNDIUtils.getJndiConnection(ctxJndi.getJndi(), ctxJndi.getContext());

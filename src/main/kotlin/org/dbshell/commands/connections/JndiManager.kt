@@ -97,13 +97,13 @@ class JndiManager {
 
     @ShellMethod("Validate the active connection")
     fun validateActiveConnection() {
-        val (envContext, envJndi) = EnvironmentVars.getCurrentContextAndJndi()
+        val contextAndJndi = EnvironmentVars.getCurrentContextAndJndi()
         try {
-            val ds = JNDIUtils.getDataSource(envJndi, envContext).left
+            val ds = JNDIUtils.getDataSource(contextAndJndi.jndi, contextAndJndi.context).left
             ds.connection
             println("Successfully validated current active connection.")
         } catch (sqlEx: Exception) {
-            val message = "Error when creating connection to context $envContext and jndi $envJndi: ${sqlEx.message}"
+            val message = "Error when creating connection to context ${contextAndJndi.context} and jndi ${contextAndJndi.jndi}: ${sqlEx.message}"
             logger.error(message)
         }
     }

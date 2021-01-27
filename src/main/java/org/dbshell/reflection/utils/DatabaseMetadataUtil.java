@@ -1,16 +1,9 @@
 package org.dbshell.reflection.utils;
 
-import org.dbshell.reflection.utils.dto.Schema;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -44,35 +37,5 @@ public class DatabaseMetadataUtil {
                                 m -> m
                         )
                 );
-    }
-
-    public static List<Schema> getSchemas(DatabaseMetaData dbmd) throws SQLException {
-        try {
-            ResultSet rs = dbmd.getSchemas();
-            List<Schema> schemaList = new ArrayList<>();
-
-            while (rs.next()) {
-                schemaList.add(new Schema(rs.getString(1), rs.getString(2)));
-            }
-            rs.close();
-            return schemaList;
-        } catch (SQLException sqlEx) {
-            throw sqlEx;
-        }
-    }
-
-    public static List<String> getCatalogs(DatabaseMetaData dbmd) throws SQLException {
-        try {
-            ResultSet rs = dbmd.getCatalogs();
-            List<String> schemaList = new ArrayList<>();
-
-            while (rs.next()) {
-                schemaList.add(rs.getString(1));
-            }
-            rs.close();
-            return schemaList;
-        } catch (SQLException sqlEx) {
-            throw sqlEx;
-        }
     }
 }

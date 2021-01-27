@@ -30,5 +30,25 @@ class EnvironmentProps {
                 }
             }
         }
+        fun getCurrentCatalog(): String {
+            if(exists) {
+                val p = Properties()
+                f.inputStream().use{fis ->
+                    p.load(fis)
+                    return p.getProperty("currentCatalog")
+                }
+            } else {
+                return ""
+            }
+        }
+        fun setCurrentCatalog(catalog: String) {
+            if(exists) {
+                f.outputStream().use {fos ->
+                    val p = Properties()
+                    p.setProperty("currentCatalog", catalog)
+                    p.store(fos, null)
+                }
+            }
+        }
     }
 }

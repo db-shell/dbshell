@@ -21,8 +21,10 @@ class Driver {
             System.setProperty("org.osjava.sj.colon.replace", "--")
             System.setProperty("org.osjava.sj.delimiter", "/")
         }
-        val (currentContext, currentJndi) = EnvironmentProps.getCurrentContextAndJndi()
-        EnvironmentVars.setCurrentContextAndJndi(currentContext, currentJndi)
+        val ctxJndi = EnvironmentProps.getCurrentContextAndJndi()
+        EnvironmentVars.setCurrentContextAndJndi(ctxJndi.context, ctxJndi.jndi)
+        val catalog = EnvironmentProps.getCurrentCatalog()
+        EnvironmentVars.setCurrentCatalog(catalog)
     }
 
     companion object {

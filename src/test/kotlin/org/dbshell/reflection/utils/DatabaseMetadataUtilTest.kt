@@ -10,6 +10,6 @@ class DatabaseMetadataUtilTest {
         val connection = JNDIUtils.getJndiConnection("SqlLiteTestInput", "default_ds")
         val dbmd = connection.metaData
 
-        DatabaseMetadataUtil.getSchemas(dbmd)
+        //DatabaseMetadataUtil.getSchemas(dbmd)
     }
 }
