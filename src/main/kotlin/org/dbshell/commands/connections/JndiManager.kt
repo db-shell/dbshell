@@ -94,6 +94,8 @@ class JndiManager {
         EnvironmentProps.setCurrentContextandJndi(context, jndi)
         EnvironmentVars.setCurrentCatalog("")
         EnvironmentProps.setCurrentCatalog("")
+        EnvironmentVars.setCurrentSchema("")
+        EnvironmentProps.setCurrentSchema("")
         println("Set current connection to context $context and jndi $jndi")
     }
 

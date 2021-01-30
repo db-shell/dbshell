@@ -23,11 +23,8 @@ class ConnectionManager {
     init {
         connectionHeaders["key"] = "Connection Property"
         connectionHeaders["value"] = "Value"
-
-        schemaHeaders["key"] = "Schema"
-        schemaHeaders["value"] = "Catalog"
-
-        catalogHeaders["key"] = "Catalog"
+        schemaHeaders["schema"] = "Schema"
+        catalogHeaders["catalog"] = "Catalog"
     }
 
     companion object {

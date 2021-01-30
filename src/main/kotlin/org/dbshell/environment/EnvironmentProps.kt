@@ -10,7 +10,7 @@ class EnvironmentProps {
         private val exists = f.exists()
 
         fun getCurrentContextAndJndi(): ContextAndJndi {
-            if(exists) {
+            if (exists) {
                 val p = Properties()
                 f.inputStream().use { fis ->
                     p.load(fis)
@@ -20,6 +20,7 @@ class EnvironmentProps {
                 return ContextAndJndi("", "")
             }
         }
+
         fun setCurrentContextandJndi(context: String, jndi: String) {
             if (exists) {
                 f.inputStream().use { fis ->
@@ -33,10 +34,11 @@ class EnvironmentProps {
                 }
             }
         }
+
         fun getCurrentCatalog(): String {
-            if(exists) {
+            if (exists) {
                 val p = Properties()
-                f.inputStream().use{fis ->
+                f.inputStream().use { fis ->
                     p.load(fis)
                     return p.getProperty("currentCatalog")
                 }
@@ -44,13 +46,39 @@ class EnvironmentProps {
                 return ""
             }
         }
+
         fun setCurrentCatalog(catalog: String) {
-            if(exists) {
-                f.inputStream().use {fis ->
+            if (exists) {
+                f.inputStream().use { fis ->
                     val p = Properties()
                     p.load(fis)
                     p.setProperty("currentCatalog", catalog)
-                    f.outputStream().use {fos ->
+                    f.outputStream().use { fos ->
+                        p.store(fos, null)
+                    }
+                }
+            }
+        }
+
+        fun getCurrentSchema(): String {
+            if (exists) {
+                val p = Properties()
+                f.inputStream().use { fis ->
+                    p.load(fis)
+                    return p.getProperty("currentSchema")
+                }
+            } else {
+                return ""
+            }
+        }
+
+        fun setCurrentSchema(schema: String) {
+            if (exists) {
+                f.inputStream().use { fis ->
+                    val p = Properties()
+                    p.load(fis)
+                    p.setProperty("currentSchema", schema)
+                    f.outputStream().use { fos ->
                         p.store(fos, null)
                     }
                 }

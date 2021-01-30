@@ -20,4 +20,12 @@ public class EnvironmentVars {
             System.setProperty("currentCatalog", catalog);
         }
     }
+    public static void setCurrentSchema(String schema) {
+        if(schema != null) {
+            System.setProperty("currentSchema", schema);
+        }
+    }
+    public static String getCurrentSchema() {
+        return System.getProperty("currentSchema");
+    }
 }

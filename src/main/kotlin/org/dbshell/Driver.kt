@@ -25,6 +25,8 @@ class Driver {
         EnvironmentVars.setCurrentContextAndJndi(ctxJndi.context, ctxJndi.jndi)
         val catalog = EnvironmentProps.getCurrentCatalog()
         EnvironmentVars.setCurrentCatalog(catalog)
+        val schema = EnvironmentProps.getCurrentSchema()
+        EnvironmentVars.setCurrentSchema(schema)
     }
 
     companion object {

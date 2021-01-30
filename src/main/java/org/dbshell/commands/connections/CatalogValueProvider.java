@@ -27,6 +27,7 @@ public class CatalogValueProvider extends ValueProviderSupport {
 
             return DatabaseMetadata.getCatalogs(dbmd)
                     .stream()
+                    .map(c -> c.getCatalog())
                     .filter(s -> s.contains(currentInput))
                     .map(CompletionProposal::new)
                     .collect(Collectors.toList());

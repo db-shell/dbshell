@@ -1,6 +1,8 @@
 package org.dbshell.db.metadata;
 
+import org.dbshell.db.metadata.dto.Catalog;
 import org.dbshell.db.metadata.dto.Schema;
+import org.dbshell.db.metadata.dto.Table;
 
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -15,7 +17,7 @@ public class DatabaseMetadata {
             List<Schema> schemaList = new ArrayList<>();
 
             while (rs.next()) {
-                schemaList.add(new Schema(rs.getString(1), rs.getString(2)));
+                schemaList.add(new Schema(rs.getString(1)));
             }
             rs.close();
             return schemaList;
@@ -24,28 +26,28 @@ public class DatabaseMetadata {
         }
     }
 
-    public static List<String> getCatalogs(DatabaseMetaData dbmd) throws SQLException {
+    public static List<Catalog> getCatalogs(DatabaseMetaData dbmd) throws SQLException {
         try {
             ResultSet rs = dbmd.getCatalogs();
-            List<String> schemaList = new ArrayList<>();
+            List<Catalog> catalogList = new ArrayList<>();
 
             while (rs.next()) {
-                schemaList.add(rs.getString(1));
+                catalogList.add(new Catalog(rs.getString(1)));
             }
             rs.close();
-            return schemaList;
+            return catalogList;
         } catch (SQLException sqlEx) {
             throw sqlEx;
         }
     }
 
-    public static List<String> getTables(DatabaseMetaData dbmd, String catalog) throws SQLException {
+    public static List<Table> getTables(DatabaseMetaData dbmd, String catalog, String schema, String[] types) throws SQLException {
         try {
-            ResultSet rs = dbmd.getTables(catalog, null, null, null);
-            List<String> tableList = new ArrayList<>();
+            ResultSet rs = dbmd.getTables(catalog, schema, null, types);
+            List<Table> tableList = new ArrayList<>();
 
             while (rs.next()) {
-                tableList.add(rs.getString(3));
+                tableList.add(new Table(rs.getString(3), rs.getString(4)));
             }
             rs.close();
             return tableList;

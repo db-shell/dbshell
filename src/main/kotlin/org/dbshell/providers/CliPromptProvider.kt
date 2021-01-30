@@ -11,6 +11,7 @@ class CliPromptProvider: PromptProvider {
     override fun getPrompt(): AttributedString {
         val contextAndJndi = EnvironmentVars.getCurrentContextAndJndi()
         val catalog = EnvironmentVars.getCurrentCatalog()
+        val schema = EnvironmentVars.getCurrentSchema()
 
         val currentContext =
             if(contextAndJndi.context == null)
@@ -31,6 +32,13 @@ class CliPromptProvider: PromptProvider {
                 "catalog:$catalog"
             }
 
-        return AttributedString("db-shell $currentContext::$currentJndi::$currentCatalog :>", AttributedStyle.DEFAULT.foreground(AttributedStyle.BLUE))
+        val currentSchema =
+            if(schema.isNullOrEmpty()) {
+                "schema: Not Set"
+            } else {
+                "schema:$schema"
+            }
+
+        return AttributedString("db-shell $currentContext::$currentJndi::$currentCatalog::$currentSchema :>", AttributedStyle.DEFAULT.foreground(AttributedStyle.BLUE))
     }
 }
