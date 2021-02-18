@@ -6,11 +6,13 @@ import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.ui.TablesUtil
 import org.slf4j.LoggerFactory
+import org.springframework.core.convert.converter.Converter
 import org.springframework.shell.Availability
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellMethodAvailability
 import org.springframework.shell.standard.ShellOption
+import org.springframework.stereotype.Component
 import java.util.*
 
 @ShellComponent
@@ -68,13 +70,26 @@ class DatabaseManager {
 
     @ShellMethod("List all tables for the active connection and catalog")
     fun getTables(
-        @ShellOption(valueProvider = TableTypesProvider::class) types: Array<String>
+        includeViews: Boolean,
+        includeAll: Boolean
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
+            val types = mutableSetOf("TABLE")
+
+            if(includeViews)
+                types += "VIEW"
+
+            if(includeAll) {
+                types += "SYSTEM TABLE"
+                types += "MATERIALIZED QUERY TABLE"
+                types += "ALIAS"
+            }
+
             val dbmd = connection.metaData
             val currentCatalog = EnvironmentVars.getCurrentCatalog()
             val currentSchema = EnvironmentVars.getCurrentSchema()
-            val tableList = DatabaseMetadata.getTables(dbmd, currentCatalog, currentSchema, types)
+            val tableList = DatabaseMetadata.getTables(dbmd, currentCatalog, currentSchema, types.toTypedArray())
+            tableList.sortBy {t -> t.tableName}
             val tableHeaders = LinkedHashMap<String, Any>()
             tableHeaders["tableName"] = "Table Name"
             tableHeaders["tableType"] = "Table Type"
