@@ -70,8 +70,8 @@ class DatabaseManager {
 
     @ShellMethod("List all tables for the active connection and catalog")
     fun getTables(
-        includeViews: Boolean,
-        includeAll: Boolean
+        includeViews: Boolean = false,
+        includeAll: Boolean = false
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val types = mutableSetOf("TABLE")
