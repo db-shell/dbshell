@@ -2,6 +2,7 @@ package org.dbshell.commands.connections
 
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
+import org.dbshell.db.metadata.TableProvider
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.ui.TablesUtil
@@ -94,6 +95,28 @@ class DatabaseManager {
             tableHeaders["tableName"] = "Table Name"
             tableHeaders["tableType"] = "Table Type"
             TablesUtil.renderAttributeTable(tableHeaders, tableList)
+        }
+    }
+
+    @ShellMethod("Get column info for table")
+    fun getTableColumns(
+        @ShellOption(valueProvider = TableProvider::class) table: String
+    ) {
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
+            val dbmd = connection.metaData
+            val currentCatalog = EnvironmentVars.getCurrentCatalog()
+            val currentSchema = EnvironmentVars.getCurrentSchema()
+            val columnList = DatabaseMetadata.getColumns(dbmd, currentCatalog, currentSchema, table)
+            val columnHeaders = LinkedHashMap<String, Any>()
+            columnHeaders["columnName"] = "Column Name"
+            columnHeaders["typeName"] = "Type Name"
+            columnHeaders["columnSize"] = "Column Size"
+            columnHeaders["decimalDigits"] = "Decimal Digits"
+            columnHeaders["precision"] = "Precision"
+            columnHeaders["isNullable"] = "Is Nullable"
+            columnHeaders["comments"] = "Comments"
+            columnHeaders["defaultValue"] = "Default Value"
+            TablesUtil.renderAttributeTable(columnHeaders, columnList)
         }
     }
 }
