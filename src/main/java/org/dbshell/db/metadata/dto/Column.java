@@ -9,8 +9,9 @@ public class Column {
     private Boolean _isNullable; //11
     private String _comments; //12
     private String _defaultValue; //13
+    private Boolean _isPk;
 
-    public Column(String columnName, String typeName, Integer columnSize, Integer decimalDigits, Integer precision, Boolean isNullable, String comments, String defaultValue) {
+    public Column(String columnName, String typeName, Integer columnSize, Integer decimalDigits, Integer precision, Boolean isNullable, String comments, String defaultValue, Boolean isPk) {
         _columnName = columnName;
         _typeName = typeName;
         _columnSize = columnSize;
@@ -19,6 +20,7 @@ public class Column {
         _isNullable = isNullable;
         _comments = comments;
         _defaultValue = defaultValue;
+        _isPk = isPk;
     }
 
     public String getColumnName() {
@@ -44,5 +46,8 @@ public class Column {
     }
     public String getDefaultValue() {
         return _defaultValue;
+    }
+    public Boolean getIsPrimaryKey() {
+        return _isPk;
     }
 }

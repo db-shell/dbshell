@@ -116,6 +116,7 @@ class DatabaseManager {
             columnHeaders["isNullable"] = "Is Nullable"
             columnHeaders["comments"] = "Comments"
             columnHeaders["defaultValue"] = "Default Value"
+            columnHeaders["isPrimaryKey"] = "Is Primary Key"
             TablesUtil.renderAttributeTable(columnHeaders, columnList)
         }
     }
