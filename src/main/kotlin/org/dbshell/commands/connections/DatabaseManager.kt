@@ -117,6 +117,8 @@ class DatabaseManager {
             columnHeaders["comments"] = "Comments"
             columnHeaders["defaultValue"] = "Default Value"
             columnHeaders["isPrimaryKey"] = "Is Primary Key"
+            columnHeaders["isForeignKey"] = "Is Foreign Key"
+            columnHeaders["foreignKeyDescription"] = "Foreign Key Description"
             TablesUtil.renderAttributeTable(columnHeaders, columnList)
         }
     }

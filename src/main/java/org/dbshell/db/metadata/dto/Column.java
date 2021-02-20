@@ -10,8 +10,10 @@ public class Column {
     private String _comments; //12
     private String _defaultValue; //13
     private Boolean _isPk;
+    private Boolean _isFk;
+    private String _fkDesc;
 
-    public Column(String columnName, String typeName, Integer columnSize, Integer decimalDigits, Integer precision, Boolean isNullable, String comments, String defaultValue, Boolean isPk) {
+    public Column(String columnName, String typeName, Integer columnSize, Integer decimalDigits, Integer precision, Boolean isNullable, String comments, String defaultValue, Boolean isPk, Boolean isFk, String fkDesc) {
         _columnName = columnName;
         _typeName = typeName;
         _columnSize = columnSize;
@@ -21,6 +23,8 @@ public class Column {
         _comments = comments;
         _defaultValue = defaultValue;
         _isPk = isPk;
+        _isFk = isFk;
+        _fkDesc = fkDesc;
     }
 
     public String getColumnName() {
@@ -49,5 +53,11 @@ public class Column {
     }
     public Boolean getIsPrimaryKey() {
         return _isPk;
+    }
+    public Boolean getIsForeignKey() {
+        return _isFk;
+    }
+    public String getForeignKeyDescription() {
+        return _fkDesc;
     }
 }

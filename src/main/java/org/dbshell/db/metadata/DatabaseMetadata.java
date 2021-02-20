@@ -8,10 +8,7 @@ import org.dbshell.db.metadata.dto.Table;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class DatabaseMetadata {
     public static List<Schema> getSchemas(DatabaseMetaData dbmd) throws SQLException {
@@ -68,12 +65,22 @@ public class DatabaseMetadata {
             while(rsPk.next()) {
                 primaryKeys.add(rsPk.getString("COLUMN_NAME"));
             }
-
             rsPk.close();
+
+            ResultSet rsFk = dbmd.getExportedKeys(catalog, schema, table);
+            Map<String, String> foreignKeys = new HashMap<>();
+
+            while(rsFk.next()) {
+                String pkColumn = rsFk.getString("PKCOLUMN_NAME");
+                foreignKeys.put(pkColumn, rsFk.getString("FKTABLE_NAME") + "--->" + rsFk.getString("FKCOLUMN_NAME"));
+            }
+            rsFk.close();
 
             ResultSet rs = dbmd.getColumns(catalog, schema, table, null);
             List<Column> columnList = new ArrayList<>();
             Boolean isPk = false;
+            Boolean isFk = false;
+            String fkDesc = null;
 
             while (rs.next()) {
                 String columnName = rs.getString(4);
@@ -81,6 +88,13 @@ public class DatabaseMetadata {
                     isPk = true;
                 } else {
                     isPk = false;
+                }
+                if(foreignKeys.containsKey(columnName)) {
+                    isFk = true;
+                    fkDesc = foreignKeys.get(columnName);
+                } else {
+                    isFk = false;
+                    fkDesc = "";
                 }
                 columnList.add(
                     new Column(
@@ -92,7 +106,9 @@ public class DatabaseMetadata {
                       rs.getBoolean(11),
                       rs.getString(12),
                       rs.getString(13),
-                      isPk
+                      isPk,
+                      isFk,
+                      fkDesc
                     )
                 );
             }
