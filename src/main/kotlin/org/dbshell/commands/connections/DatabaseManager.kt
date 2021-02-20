@@ -1,5 +1,6 @@
 package org.dbshell.commands.connections
 
+import org.apache.commons.io.FileUtils
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.db.metadata.TableProvider
@@ -17,6 +18,7 @@ import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellMethodAvailability
 import org.springframework.shell.standard.ShellOption
 import org.springframework.stereotype.Component
+import java.io.File
 import java.util.*
 
 @ShellComponent
@@ -135,5 +137,16 @@ class DatabaseManager {
             val ddl = dslContext.ddl(dslContext.meta().getTables(table))
             ddl.queries().forEach {q -> println(q.sql)}
         }
+    }
+
+    @ShellMethod("Generate DDL for database")
+    fun getDdlForDatabase(scriptFile: File) {
+        println("Generating ddl for current database connection...")
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
+            val dslContext = DSL.using(connection, Settings().withRenderFormatted(true))
+            val ddl = dslContext.ddl(dslContext.meta().getTables())
+            ddl.queries().forEach {q -> FileUtils.writeStringToFile(scriptFile, q.sql, true)}
+        }
+        println("Generating ddl complete. Please see file ${scriptFile.absolutePath}.")
     }
 }
