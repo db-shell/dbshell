@@ -6,6 +6,9 @@ import org.dbshell.db.metadata.TableProvider
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.ui.TablesUtil
+import org.jooq.DSLContext
+import org.jooq.conf.Settings
+import org.jooq.impl.DSL
 import org.slf4j.LoggerFactory
 import org.springframework.core.convert.converter.Converter
 import org.springframework.shell.Availability
@@ -120,6 +123,17 @@ class DatabaseManager {
             columnHeaders["isForeignKey"] = "Is Foreign Key"
             columnHeaders["foreignKeyDescription"] = "Foreign Key Description"
             TablesUtil.renderAttributeTable(columnHeaders, columnList)
+        }
+    }
+
+    @ShellMethod("Generate DDL for table")
+    fun getDdlForTable(
+        @ShellOption(valueProvider = TableProvider::class) table: String
+    ) {
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
+            val dslContext = DSL.using(connection, Settings().withRenderFormatted(true))
+            val ddl = dslContext.ddl(dslContext.meta().getTables(table))
+            ddl.queries().forEach {q -> println(q.sql)}
         }
     }
 }

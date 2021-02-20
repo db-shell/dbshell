@@ -78,9 +78,9 @@ public class DatabaseMetadata {
 
             ResultSet rs = dbmd.getColumns(catalog, schema, table, null);
             List<Column> columnList = new ArrayList<>();
-            Boolean isPk = false;
-            Boolean isFk = false;
-            String fkDesc = null;
+            boolean isPk;
+            boolean isFk;
+            String fkDesc;
 
             while (rs.next()) {
                 String columnName = rs.getString(4);
