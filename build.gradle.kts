@@ -115,6 +115,7 @@ dependencies {
     implementation("org.jooq", "jooq", "3.14.7")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
     implementation("org.mybatis", "mybatis", "3.5.5")
+    implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.36")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation(kotlin("test-junit"))

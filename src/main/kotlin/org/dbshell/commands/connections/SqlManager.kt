@@ -4,8 +4,11 @@ import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.ui.TablesUtil
+import org.relique.jdbc.csv.CsvDriver
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
+import java.io.File
+import java.io.PrintStream
 
 @ShellComponent
 class SqlManager {
@@ -34,5 +37,19 @@ class SqlManager {
         }
         val columnValues = values.map {v -> v.values.toTypedArray()}.toTypedArray()
         TablesUtil.renderAttributeTable(columnValues)
+    }
+    @ShellMethod("Export SQL query to csv")
+    fun exportQueryToCsv(sql: String, outputFile: File, separator: String = ",", includeHeaders: Boolean = true, fileExtension: String = ".csv")  {
+        println("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}...")
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
+            connection.createStatement().use { stmt ->
+                stmt.executeQuery(sql).use { rs ->
+                    PrintStream(outputFile).use { ps ->
+                        CsvDriver.writeToCsv(rs,ps,includeHeaders)
+                    }
+                }
+            }
+        }
+        println("Export complete.")
     }
 }
