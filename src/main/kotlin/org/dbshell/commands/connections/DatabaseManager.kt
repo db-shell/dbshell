@@ -2,23 +2,25 @@ package org.dbshell.commands.connections
 
 import org.apache.commons.io.FileUtils
 import org.apache.ibatis.jdbc.ScriptRunner
+import org.bradfordmiller.sqlutils.QueryInfo
+import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.db.metadata.TableProvider
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.ui.TablesUtil
-import org.jooq.DSLContext
+
 import org.jooq.conf.Settings
 import org.jooq.impl.DSL
 import org.slf4j.LoggerFactory
-import org.springframework.core.convert.converter.Converter
+
 import org.springframework.shell.Availability
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellMethodAvailability
 import org.springframework.shell.standard.ShellOption
-import org.springframework.stereotype.Component
+
 import java.io.BufferedReader
 import java.io.File
 import java.io.StringReader
