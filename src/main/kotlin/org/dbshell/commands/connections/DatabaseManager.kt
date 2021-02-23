@@ -1,6 +1,7 @@
 package org.dbshell.commands.connections
 
 import org.apache.commons.io.FileUtils
+import org.apache.ibatis.jdbc.ScriptRunner
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.db.metadata.TableProvider
@@ -18,7 +19,10 @@ import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellMethodAvailability
 import org.springframework.shell.standard.ShellOption
 import org.springframework.stereotype.Component
+import java.io.BufferedReader
 import java.io.File
+import java.io.StringReader
+import java.nio.file.Files
 import java.util.*
 
 @ShellComponent
@@ -148,5 +152,21 @@ class DatabaseManager {
             ddl.queries().forEach {q -> FileUtils.writeStringToFile(scriptFile, q.sql, true)}
         }
         println("Generating ddl complete. Please see file ${scriptFile.absolutePath}.")
+    }
+
+    @ShellMethod("Run sql script")
+    fun runSqlScript(scriptFile: File) {
+        println("Executing script ${scriptFile.absolutePath}...")
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {connection ->
+            val content = String(Files.readAllBytes(scriptFile.toPath()))
+            BufferedReader(StringReader(content)).use {br ->
+                connection.catalog = EnvironmentVars.getCurrentCatalog()
+                connection.
+                val sr = ScriptRunner(connection)
+                sr.setEscapeProcessing(false)
+                sr.runScript(br)
+            }
+        }
+        println("Execution of script complete.")
     }
 }

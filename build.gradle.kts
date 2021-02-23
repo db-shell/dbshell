@@ -113,6 +113,8 @@ dependencies {
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
     implementation("org.postgresql", "postgresql", "42.2.18")
     implementation("org.jooq", "jooq", "3.14.7")
+    implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
+    implementation("org.mybatis", "mybatis", "3.5.5")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation(kotlin("test-junit"))
