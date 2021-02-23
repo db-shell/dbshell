@@ -22,7 +22,7 @@ class SqlManager {
                 values = mutableListOf(columns.values.map{c -> c to c as Any}.toMap())
                 connection.createStatement().use { stmt ->
                     stmt.executeQuery(sql).use { rs ->
-                        while (rs.next() || rowLimit == rowCount) {
+                        while (rs.next() && rowCount <= rowLimit) {
                             values.add(SqlUtils.getMapFromRs(rs, columns).toMutableMap())
                             rowCount += 1
                         }
