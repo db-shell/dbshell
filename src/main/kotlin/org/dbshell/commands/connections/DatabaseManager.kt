@@ -160,8 +160,6 @@ class DatabaseManager {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {connection ->
             val content = String(Files.readAllBytes(scriptFile.toPath()))
             BufferedReader(StringReader(content)).use {br ->
-                connection.catalog = EnvironmentVars.getCurrentCatalog()
-                connection.
                 val sr = ScriptRunner(connection)
                 sr.setEscapeProcessing(false)
                 sr.runScript(br)
