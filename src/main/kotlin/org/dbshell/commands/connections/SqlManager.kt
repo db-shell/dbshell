@@ -4,6 +4,7 @@ import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.ui.TablesUtil
+import org.dbshell.utils.ScriptRunner
 import org.relique.jdbc.csv.CsvDriver
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
@@ -51,5 +52,11 @@ class SqlManager {
             }
         }
         println("Export complete.")
+    }
+    @ShellMethod("Run SQL commands")
+    fun runSqlCommands(sql: String) {
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
+            ScriptRunner.executeScript(sql, connection)
+        }
     }
 }

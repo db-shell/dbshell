@@ -1,7 +1,6 @@
 package org.dbshell.commands.connections
 
 import org.apache.commons.io.FileUtils
-import org.apache.ibatis.jdbc.ScriptRunner
 import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
@@ -26,6 +25,7 @@ import java.io.File
 import java.io.StringReader
 import java.nio.file.Files
 import java.util.*
+import org.dbshell.utils.ScriptRunner
 
 @ShellComponent
 class DatabaseManager {
@@ -161,11 +161,7 @@ class DatabaseManager {
         println("Executing script ${scriptFile.absolutePath}...")
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {connection ->
             val content = String(Files.readAllBytes(scriptFile.toPath()))
-            BufferedReader(StringReader(content)).use {br ->
-                val sr = ScriptRunner(connection)
-                sr.setEscapeProcessing(false)
-                sr.runScript(br)
-            }
+            ScriptRunner.executeScript(content, connection)
         }
         println("Execution of script complete.")
     }
