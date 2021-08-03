@@ -2,7 +2,11 @@ package org.dbshell.commands.connections
 
 import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
+import org.dbshell.actions.ExportQueryToCsv
+import org.dbshell.actions.RunQuery
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
+import org.dbshell.jobqueue.JobQueue
+import org.dbshell.jobqueue.QueueWrapper
 import org.dbshell.ui.TablesUtil
 import org.dbshell.utils.ScriptRunner
 import org.relique.jdbc.csv.CsvDriver
@@ -12,46 +16,18 @@ import java.io.File
 import java.io.PrintStream
 
 @ShellComponent
-class SqlManager {
+class SqlManager: Manager {
     @ShellMethod("Run a SQL query")
-    fun runQuery(sql: String, rowLimit: Long =  50) {
-        var rowCount = 0L
-        lateinit var values: MutableList<Map<String, Any>>
-        lateinit var qi: QueryInfo
-        lateinit var columns: Map<Int, String>
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            try {
-                qi = SqlUtils.getQueryInfo(sql, connection)
-                columns = SqlUtils.getColumnsFromRs(qi)
-                values = mutableListOf(columns.values.map{c -> c to c as Any}.toMap())
-                connection.createStatement().use { stmt ->
-                    stmt.executeQuery(sql).use { rs ->
-                        while (rs.next() && rowCount <= rowLimit) {
-                            values.add(SqlUtils.getMapFromRs(rs, columns).toMutableMap())
-                            rowCount += 1
-                        }
-                    }
-                }
-            } catch(e: Exception) {
-                println(e.message)
-            }
-        }
-        val columnValues = values.map {v -> v.values.toTypedArray()}.toTypedArray()
-        TablesUtil.renderAttributeTable(columnValues)
+    fun runQuery(sql: String, rowLimit: Long =  50, executeAsync: Boolean = false) {
+        val rq = RunQuery(sql, rowLimit)
+        processAction(rq, executeAsync)
     }
     @ShellMethod("Export SQL query to csv")
-    fun exportQueryToCsv(sql: String, outputFile: File, separator: String = ",", includeHeaders: Boolean = true, fileExtension: String = ".csv")  {
-        println("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}...")
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            connection.createStatement().use { stmt ->
-                stmt.executeQuery(sql).use { rs ->
-                    PrintStream(outputFile).use { ps ->
-                        CsvDriver.writeToCsv(rs,ps,includeHeaders)
-                    }
-                }
-            }
-        }
-        println("Export complete.")
+    fun exportQueryToCsv(sql: String, outputFile: File, separator: String = ",", includeHeaders: Boolean = true, fileExtension: String = ".csv", executeAsync: Boolean = false)  {
+        //println("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}...")
+        val exportCsv = ExportQueryToCsv(sql, outputFile, separator, includeHeaders, fileExtension)
+        processAction(exportCsv, executeAsync)
+        //println("Export complete.")
     }
     @ShellMethod("Run SQL commands")
     fun runSqlCommands(sql: String) {

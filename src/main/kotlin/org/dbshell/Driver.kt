@@ -2,10 +2,12 @@ package org.dbshell
 
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
+import org.dbshell.jobqueue.JobQueue
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.SpringApplication
 import java.io.File
+import java.io.IOException
 import java.lang.IllegalStateException
 import java.util.logging.LogManager
 import javax.naming.Context
@@ -27,6 +29,9 @@ class Driver {
         EnvironmentVars.setCurrentCatalog(catalog)
         val schema = EnvironmentProps.getCurrentSchema()
         EnvironmentVars.setCurrentSchema(schema)
+
+        //Start listening thread for job queue
+
     }
 
     companion object {
@@ -39,6 +44,21 @@ class Driver {
             app.run(*args)
         } catch(iex: IllegalStateException) {
             logger.error("Error occurred while running Spring Shell: ${iex.message}")
+        } finally {
+            logger.info("Closing job queue...")
+            try {
+                JobQueue.jobQueue.close()
+                logger.info("Job queue successfully closed.")
+            } catch(iox: IOException) {
+                logger.error("Error occurred closing the job queue: ${iox.message}")
+            }
+            logger.info("Closing results queue...")
+            try {
+                JobQueue.resultsQueue.close()
+                logger.info("Job queue successfully closed.")
+            } catch(iox: IOException) {
+                logger.error("Error occurred closing the job queue: ${iox.message}")
+            }
         }
     }
 }

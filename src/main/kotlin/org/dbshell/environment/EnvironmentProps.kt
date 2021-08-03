@@ -4,6 +4,9 @@ import java.io.File
 import java.util.*
 
 class EnvironmentProps {
+
+    data class QueueInfo(val path: String, val name: String)
+
     companion object {
 
         private val f = File("conf/settings.properties")
@@ -83,6 +86,30 @@ class EnvironmentProps {
                     }
                 }
             }
+        }
+
+        private fun getQueueInfo(queuePath: String, queueName: String): QueueInfo {
+            if(exists) {
+                val p = Properties()
+                f.inputStream().use { fis ->
+                    p.load(fis)
+                    return QueueInfo(p.getProperty(queuePath), p.getProperty(queueName))
+                }
+            } else {
+                val p = Properties()
+                val f = File("src/deploy/lib/conf/settings.properties")
+                f.inputStream().use { fis ->
+                    p.load(fis)
+                    return QueueInfo(p.getProperty(queuePath), p.getProperty(queueName))
+                }
+            }
+        }
+
+        fun getJobQueueInfo(): QueueInfo {
+            return getQueueInfo("jobqueue.path", "jobqueue.data.name")
+        }
+        fun getResultsQueueInfo(): QueueInfo {
+            return getQueueInfo("jobqueue.results", "jobqueue.results.name")
         }
     }
 }

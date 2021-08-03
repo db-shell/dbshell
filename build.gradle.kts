@@ -16,6 +16,9 @@ plugins {
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://raw.github.com/bulldog2011/bulldog-repo/master/repo/releases/")
+    }
 }
 
 fun getSoftwareVersion(): String {
@@ -75,6 +78,9 @@ distributions {
             from("src/deploy/bin/data") {
                 into("data")
             }
+            from("src/deploy/queue/data") {
+                into("queue/data")
+            }
         }
     }
 }
@@ -116,6 +122,10 @@ dependencies {
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
     implementation("org.mybatis", "mybatis", "3.5.5")
     implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.36")
+    implementation("com.fasterxml.jackson.core", "jackson-core", "2.11.2")
+    implementation("com.fasterxml.jackson.core", "jackson-databind", "2.11.2")
+    implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", "2.11.2")
+    implementation("com.leansoft", "bigqueue", "0.7.0")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation(kotlin("test-junit"))
