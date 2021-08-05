@@ -3,17 +3,23 @@ package org.dbshell
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.jobqueue.JobQueue
+import org.dbshell.jobqueue.JobQueueConsumer
+import org.dbshell.jobqueue.ResultsQueueConsumer
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.SpringApplication
 import java.io.File
 import java.io.IOException
 import java.lang.IllegalStateException
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import java.util.logging.LogManager
 import javax.naming.Context
 
 @SpringBootApplication
 class Driver {
+
+    final val executorService = Executors.newFixedThreadPool(4)
 
     init {
         if(!File("conf/jndi.properties").isFile) {
@@ -31,7 +37,8 @@ class Driver {
         EnvironmentVars.setCurrentSchema(schema)
 
         //Start listening thread for job queue
-
+        executorService.execute(JobQueueConsumer())
+        executorService.execute(ResultsQueueConsumer())
     }
 
     companion object {
@@ -45,6 +52,18 @@ class Driver {
         } catch(iex: IllegalStateException) {
             logger.error("Error occurred while running Spring Shell: ${iex.message}")
         } finally {
+            logger.info("Shutting down executor service...")
+            executorService.shutdown()
+            try {
+                if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                    executorService.shutdownNow()
+                }
+            } catch(iex:InterruptedException) {
+                executorService.shutdownNow()
+                Thread.currentThread().interrupt()
+                logger.error(iex.message)
+                throw iex
+            }
             logger.info("Closing job queue...")
             try {
                 JobQueue.jobQueue.close()

@@ -1,22 +1,24 @@
 package org.dbshell.actions
 
+import io.vavr.control.Either
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.relique.jdbc.csv.CsvDriver
 import java.io.File
 import java.io.PrintStream
-import java.sql.ResultSet
+import java.util.*
 
-data class ExportQueryToCsv(val sql: String, val outputFile: File, val separator: String = ",", val includeHeaders: Boolean = true, val fileExtension: String = ".csv"): Action<ResultSet> {
-    override fun execute(): ResultSet {
+data class ExportQueryToCsv(val sql: String, val outputFile: File, val separator: String = ",", val includeHeaders: Boolean = true, val fileExtension: String = ".csv"): Action {
+    override fun execute(): ActionResult {
+        var actionList = mutableListOf<ActionLog>()
+        actionList.add(ActionLog("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}...", Date()))
         val conn = ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection
         val stmt = conn.createStatement()
-        return stmt.executeQuery(sql)
-    }
-    override fun render(data: ResultSet) {
-        data.use { rs ->
+        stmt.executeQuery(sql).use {rs ->
             PrintStream(outputFile).use { ps ->
                 CsvDriver.writeToCsv(rs,ps,includeHeaders)
             }
         }
+        actionList.add(ActionLog("Export complete.", Date()))
+        return Either.left(actionList)
     }
 }

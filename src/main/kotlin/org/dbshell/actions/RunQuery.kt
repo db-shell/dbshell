@@ -1,15 +1,12 @@
 package org.dbshell.actions
 
+import io.vavr.control.Either
 import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
-import org.dbshell.ui.TablesUtil
 
-data class RunQuery(val sql: String, val rowLimit: Long =  50): Action<Array<Array<Any>>> {
-    override fun render(data: Array<Array<Any>>) {
-        TablesUtil.renderAttributeTable(data)
-    }
-    override fun execute(): Array<Array<Any>> {
+data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {
+    override fun execute(): ActionResult {
         var rowCount = 0L
         lateinit var values: MutableList<Map<String, Any>>
         lateinit var qi: QueryInfo
@@ -31,6 +28,6 @@ data class RunQuery(val sql: String, val rowLimit: Long =  50): Action<Array<Arr
                 println(e.message)
             }
         }
-        return values.map {v -> v.values.toTypedArray()}.toTypedArray()
+        return Either.right(values.map { v -> v.values.toTypedArray()}.toTypedArray())
     }
 }

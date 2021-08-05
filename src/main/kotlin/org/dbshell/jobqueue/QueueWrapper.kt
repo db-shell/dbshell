@@ -3,28 +3,61 @@ package org.dbshell.jobqueue
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.dbshell.actions.Action
+import org.dbshell.actions.ActionResult
 import java.util.*
 
-data class PayLoad<T>(val id: UUID, val action: Action<T>)
-data class Results<T>(val id: UUID, val action: Action<T>, val results: T)
+data class PayLoad(val id: UUID, val action: Action)
+data class Result(val id: UUID, val result: ActionResult)
 
 class JobQueueWrapper {
     companion object {
 
         private val om = ObjectMapper().registerModule(KotlinModule())
 
-        fun <T> put(action: Action<T>): UUID {
+        fun put(action: Action): UUID {
             val uuid = UUID.randomUUID()
             val payload = PayLoad(uuid, action)
             val data = om.writeValueAsBytes(payload)
             JobQueue.jobQueue.enqueue(data)
+            JobQueue.jobQueue.peek()
             return uuid
         }
 
-        fun get(): PayLoad<*> {
-            val data = JobQueue.jobQueue.dequeue()
-            val payload = om.readValue(data, PayLoad::class.java)!!
+        fun get(): PayLoad? {
+            val check = JobQueue.jobQueue.peek()
+            val payload =
+            if(check != null) {
+                val data = JobQueue.jobQueue.dequeue()
+                om.readValue(data, PayLoad::class.java)!!
+            } else {
+                null
+            }
             return payload
+        }
+    }
+}
+
+class ResultQueueWrapper {
+    companion object {
+
+        private val om = ObjectMapper().registerModule(KotlinModule())
+
+        fun put(uuid: UUID, actionResult: ActionResult) {
+            val result = Result(uuid, actionResult)
+            val data = om.writeValueAsBytes(result)
+            JobQueue.resultsQueue.enqueue(data)
+        }
+
+        fun get(): Result? {
+            val check = JobQueue.resultsQueue.peek()
+            val result =
+                if(check != null) {
+                    val data = JobQueue.resultsQueue.dequeue()
+                    om.readValue(data, Result::class.java)!!
+                } else {
+                    null
+                }
+            return result
         }
     }
 }

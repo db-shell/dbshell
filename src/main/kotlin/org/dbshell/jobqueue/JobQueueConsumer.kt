@@ -1,6 +1,5 @@
 package org.dbshell.jobqueue
 
-import org.dbshell.actions.Action
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -11,14 +10,18 @@ class JobQueueConsumer : Runnable {
     init {
         logger.info("${this.javaClass.canonicalName}:: Initializing target consumer")
     }
-    private fun processAction(action: Action<*>) {
-
+    private fun processPayload(payload: PayLoad) {
+        val uuid = payload.id
+        val action = payload.action
+        val result = action.execute()
+        ResultQueueWrapper.put(uuid, result)
     }
     override fun run() {
         while(true) {
             val payload = JobQueueWrapper.get()
-            val action = payload.action
-            processAction(action)
+            payload?.let {p ->
+                processPayload(p)
+            }
         }
     }
 }
