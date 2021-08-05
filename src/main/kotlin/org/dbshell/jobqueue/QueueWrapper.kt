@@ -1,7 +1,9 @@
 package org.dbshell.jobqueue
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import io.vavr.jackson.datatype.VavrModule
 import org.dbshell.actions.Action
 import org.dbshell.actions.ActionResult
 import java.util.*
@@ -19,7 +21,6 @@ class JobQueueWrapper {
             val payload = PayLoad(uuid, action)
             val data = om.writeValueAsBytes(payload)
             JobQueue.jobQueue.enqueue(data)
-            JobQueue.jobQueue.peek()
             return uuid
         }
 
@@ -40,7 +41,10 @@ class JobQueueWrapper {
 class ResultQueueWrapper {
     companion object {
 
-        private val om = ObjectMapper().registerModule(KotlinModule())
+        private val om =
+            ObjectMapper()
+                .registerModule(KotlinModule())
+                .registerModule(VavrModule())
 
         fun put(uuid: UUID, actionResult: ActionResult) {
             val result = Result(uuid, actionResult)

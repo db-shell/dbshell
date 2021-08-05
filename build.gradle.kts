@@ -126,6 +126,7 @@ dependencies {
     implementation("com.fasterxml.jackson.core", "jackson-databind", "2.11.2")
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", "2.11.2")
     implementation("com.leansoft", "bigqueue", "0.7.0")
+    implementation("io.vavr", "vavr-jackson", "0.9.0")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation(kotlin("test-junit"))

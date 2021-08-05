@@ -24,7 +24,6 @@ class SqlManager: UIManager {
     fun runQuery(sql: String, rowLimit: Long =  50, executeAsync: Boolean = false) {
         val rq = RunQuery(sql, rowLimit)
         val jobId = JobQueueWrapper.put(rq)
-        Thread.sleep(5000)
         val result = ResultsHashMap.resultsMap[jobId]!!
         renderResult(result)
     }
