@@ -4,6 +4,7 @@ import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.actions.ExportQueryToCsv
 import org.dbshell.actions.RunQuery
+import org.dbshell.actions.RunSqlCommands
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.jobqueue.JobQueue
 import org.dbshell.jobqueue.JobQueueWrapper
@@ -31,9 +32,8 @@ class SqlManager: UIManager {
         executeAction(exportCsv, executeAsync)
     }
     @ShellMethod("Run SQL commands")
-    fun runSqlCommands(sql: String) {
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            ScriptRunner.executeScript(sql, connection)
-        }
+    fun runSqlCommands(sql: String, executeAsync: Boolean) {
+        val runSqlCommands = RunSqlCommands(sql)
+        executeAction(runSqlCommands, executeAsync)
     }
 }

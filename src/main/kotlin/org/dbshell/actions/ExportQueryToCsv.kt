@@ -7,10 +7,10 @@ import java.io.File
 import java.io.PrintStream
 import java.util.*
 
-data class ExportQueryToCsv(val sql: String, val outputFile: File, val separator: String = ",", val includeHeaders: Boolean = true, val fileExtension: String = ".csv"): Action {
+data class ExportQueryToCsv(val sql: String, val outputFile: File, val separator: String = ",", val includeHeaders: Boolean = true, val fileExtension: String = ".csv", val runAsync: Boolean = false): Action {
     override fun execute(): ActionResult {
         var actionList = mutableListOf<ActionLog>()
-        actionList.add(ActionLog("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}...", Date()))
+        actionList.add(ActionLog("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}..."))
         val conn = ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection
         val stmt = conn.createStatement()
         stmt.executeQuery(sql).use {rs ->
@@ -18,7 +18,7 @@ data class ExportQueryToCsv(val sql: String, val outputFile: File, val separator
                 CsvDriver.writeToCsv(rs,ps,includeHeaders)
             }
         }
-        actionList.add(ActionLog("Export complete.", Date()))
+        actionList.add(ActionLog("Export complete."))
         return Either.left(actionList)
     }
 }
