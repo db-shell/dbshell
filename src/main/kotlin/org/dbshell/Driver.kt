@@ -12,6 +12,7 @@ import java.io.File
 import java.io.IOException
 import java.lang.IllegalStateException
 import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import java.util.logging.LogManager
 import javax.naming.Context
@@ -19,7 +20,8 @@ import javax.naming.Context
 @SpringBootApplication
 class Driver {
 
-    final val executorService = Executors.newFixedThreadPool(4)
+    //final val executorService = Executors.newFixedThreadPool(4)
+    final val executorService: ScheduledExecutorService = Executors.newScheduledThreadPool(4)
 
     init {
         if(!File("conf/jndi.properties").isFile) {
@@ -37,8 +39,8 @@ class Driver {
         EnvironmentVars.setCurrentSchema(schema)
 
         //Start listening thread for job queue
-        executorService.execute(JobQueueConsumer())
-        executorService.execute(ResultsQueueConsumer())
+        executorService.scheduleWithFixedDelay(JobQueueConsumer(), 1,  1, TimeUnit.SECONDS)
+        executorService.scheduleWithFixedDelay(ResultsQueueConsumer(), 1,  1, TimeUnit.SECONDS)
     }
 
     companion object {

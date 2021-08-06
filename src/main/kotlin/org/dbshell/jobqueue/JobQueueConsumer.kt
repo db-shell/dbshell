@@ -17,11 +17,9 @@ class JobQueueConsumer : Runnable {
         ResultQueueWrapper.put(uuid, result)
     }
     override fun run() {
-        while(true) {
-            val payload = JobQueueWrapper.get()
-            payload?.let {p ->
-                processPayload(p)
-            }
+        val payload = JobQueueWrapper.get()
+        payload?.let { p ->
+            processPayload(p)
         }
     }
 }

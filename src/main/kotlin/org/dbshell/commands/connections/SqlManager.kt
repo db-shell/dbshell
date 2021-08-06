@@ -23,17 +23,12 @@ class SqlManager: UIManager {
     @ShellMethod("Run a SQL query")
     fun runQuery(sql: String, rowLimit: Long =  50, executeAsync: Boolean = false) {
         val rq = RunQuery(sql, rowLimit)
-        val jobId = JobQueueWrapper.put(rq)
-        val result = ResultsHashMap.resultsMap[jobId]!!
-        renderResult(result)
+        executeAction(rq, executeAsync)
     }
     @ShellMethod("Export SQL query to csv")
     fun exportQueryToCsv(sql: String, outputFile: File, separator: String = ",", includeHeaders: Boolean = true, fileExtension: String = ".csv", executeAsync: Boolean = false)  {
-        //println("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}...")
-        //val exportCsv = ExportQueryToCsv(sql, outputFile, separator, includeHeaders, fileExtension)
-        //JobQueueWrapper.put(exportCsv)
-        //processAction(exportCsv, executeAsync)
-        //println("Export complete.")
+        val exportCsv = ExportQueryToCsv(sql, outputFile, separator, includeHeaders, fileExtension)
+        executeAction(exportCsv, executeAsync)
     }
     @ShellMethod("Run SQL commands")
     fun runSqlCommands(sql: String) {
