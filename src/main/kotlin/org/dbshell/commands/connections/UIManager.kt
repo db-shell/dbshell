@@ -20,7 +20,7 @@ interface UIManager {
             }
         }
     }
-    fun executeAction(action: Action, isAsync: Boolean) {
+    fun executeAction(action: Action, isAsync: Boolean = false) {
         if(isAsync) {
             val jobId = JobQueueWrapper.put(action)
             println("Job has been dispatched to job processor. Access the results of your job with this id: $jobId")

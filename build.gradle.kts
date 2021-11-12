@@ -101,15 +101,16 @@ release {
     versionPropertyFile = "version.properties"
 }
 
-val log4jVersion = "2.14.0"
+val log4jVersion = "2.14.1"
 val springVersion = "2.0.1.RELEASE"
+val jacksonVersion = "2.13.0"
 
 dependencies {
 
     api("org.bradfordmiller", "simplejndiutils", "0.0.13") {
         isTransitive = true
     }
-    implementation("us.fatehi:schemacrawler:16.11.6")
+    implementation("us.fatehi:schemacrawler:16.15.11")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion)
     implementation("org.springframework.boot", "spring-boot-starter", "2.4.1")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -117,16 +118,16 @@ dependencies {
     implementation("org.apache.logging.log4j",  "log4j-core",  log4jVersion)
     implementation("org.apache.logging.log4j",  "log4j-api",  log4jVersion)
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
-    implementation("org.postgresql", "postgresql", "42.2.18")
-    implementation("org.jooq", "jooq", "3.14.7")
+    implementation("org.postgresql", "postgresql", "42.3.1")
+    implementation("org.jooq", "jooq", "3.15.4")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
-    implementation("org.mybatis", "mybatis", "3.5.5")
-    implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.36")
-    implementation("com.fasterxml.jackson.core", "jackson-core", "2.11.2")
-    implementation("com.fasterxml.jackson.core", "jackson-databind", "2.11.2")
-    implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", "2.11.2")
+    implementation("org.mybatis", "mybatis", "3.5.7")
+    implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.37")
+    implementation("com.fasterxml.jackson.core", "jackson-core", jacksonVersion)
+    implementation("com.fasterxml.jackson.core", "jackson-databind", jacksonVersion)
+    implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
     implementation("com.leansoft", "bigqueue", "0.7.0")
-    implementation("io.vavr", "vavr-jackson", "0.9.0")
+    implementation("io.vavr", "vavr-jackson", "0.10.3")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation(kotlin("test-junit"))

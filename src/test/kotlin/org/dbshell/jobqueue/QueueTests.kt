@@ -29,7 +29,7 @@ class QueueTests {
     @Test
     fun testResultQueue() {
 
-        if(!File("conf/jndi.properties").isFile) {
+        if (!File("conf/jndi.properties").isFile) {
             System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.osjava.sj.SimpleContextFactory")
             System.setProperty("org.osjava.sj.jndi.shared", "true")
             System.setProperty("org.osjava.sj.root", "src/deploy/bin/conf/jndi")
