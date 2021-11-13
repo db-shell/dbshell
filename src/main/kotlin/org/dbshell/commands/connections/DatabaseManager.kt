@@ -5,10 +5,13 @@ import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
-import org.dbshell.db.metadata.TableProvider
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
+import org.dbshell.providers.CatalogValueProvider
 import org.dbshell.ui.TablesUtil
+import org.dbshell.providers.JobValueProvider
+import org.dbshell.providers.SchemaValueProvider
+import org.dbshell.providers.TableProvider
 
 import org.jooq.conf.Settings
 import org.jooq.impl.DSL
@@ -63,7 +66,7 @@ class DatabaseManager {
         ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             connection.catalog = catalog
-            EnvironmentVars.setCurrentCatalog(catalog)
+            EnvironmentVars.currentCatalog = catalog
             EnvironmentProps.setCurrentCatalog(catalog)
         }
     }
@@ -75,7 +78,7 @@ class DatabaseManager {
         ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             connection.schema = schema
-            EnvironmentVars.setCurrentSchema(schema)
+            EnvironmentVars.currentSchema = schema
             EnvironmentProps.setCurrentSchema(schema)
         }
     }
@@ -98,10 +101,11 @@ class DatabaseManager {
             }
 
             val dbmd = connection.metaData
-            val currentCatalog = EnvironmentVars.getCurrentCatalog()
-            val currentSchema = EnvironmentVars.getCurrentSchema()
-            val tableList = DatabaseMetadata.getTables(dbmd, currentCatalog, currentSchema, types.toTypedArray())
-            tableList.sortBy {t -> t.tableName}
+            val currentCatalog = EnvironmentVars.currentCatalog
+            val currentSchema = EnvironmentVars.currentSchema
+            val tableList = DatabaseMetadata.getTables(dbmd, currentCatalog!!, currentSchema!!, types.toTypedArray())
+            //tableList.sortBy {t -> t.tableName}
+
             val tableHeaders = LinkedHashMap<String, Any>()
             tableHeaders["tableName"] = "Table Name"
             tableHeaders["tableType"] = "Table Type"
@@ -115,9 +119,9 @@ class DatabaseManager {
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val dbmd = connection.metaData
-            val currentCatalog = EnvironmentVars.getCurrentCatalog()
-            val currentSchema = EnvironmentVars.getCurrentSchema()
-            val columnList = DatabaseMetadata.getColumns(dbmd, currentCatalog, currentSchema, table)
+            val currentCatalog = EnvironmentVars.currentCatalog
+            val currentSchema = EnvironmentVars.currentSchema
+            val columnList = DatabaseMetadata.getColumns(dbmd, currentCatalog!!, currentSchema!!, table)
             val columnHeaders = LinkedHashMap<String, Any>()
             columnHeaders["columnName"] = "Column Name"
             columnHeaders["typeName"] = "Type Name"
@@ -150,7 +154,7 @@ class DatabaseManager {
         println("Generating ddl for current database connection...")
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val dslContext = DSL.using(connection, Settings().withRenderFormatted(true))
-            val ddl = dslContext.ddl(dslContext.meta().getTables())
+            val ddl = dslContext.ddl(dslContext.meta().tables)
             ddl.queries().forEach {q -> FileUtils.writeStringToFile(scriptFile, q.sql, true)}
         }
         println("Generating ddl complete. Please see file ${scriptFile.absolutePath}.")

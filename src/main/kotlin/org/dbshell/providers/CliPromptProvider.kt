@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component
 @Component
 class CliPromptProvider: PromptProvider {
     override fun getPrompt(): AttributedString {
-        val contextAndJndi = EnvironmentVars.getCurrentContextAndJndi()
-        val catalog = EnvironmentVars.getCurrentCatalog()
-        val schema = EnvironmentVars.getCurrentSchema()
+        val contextAndJndi = EnvironmentVars.currentContextAndJndi
+        val catalog = EnvironmentVars.currentCatalog
+        val schema = EnvironmentVars.currentSchema
 
         val currentContext =
             if(contextAndJndi.context == null)

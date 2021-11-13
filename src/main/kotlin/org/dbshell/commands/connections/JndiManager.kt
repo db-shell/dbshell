@@ -4,6 +4,8 @@ import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.ui.TablesUtil
+import org.dbshell.providers.ContextValueProvider
+import org.dbshell.providers.JndiValueProvider
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.*
 import javax.naming.InitialContext
@@ -90,18 +92,18 @@ class JndiManager {
         @ShellOption(valueProvider = ContextValueProvider::class) context: String,
         @ShellOption(valueProvider = JndiValueProvider::class) jndi: String
     ) {
-        EnvironmentVars.setCurrentContextAndJndi(context, jndi)
+        EnvironmentVars.currentContextAndJndi(context, jndi)
         EnvironmentProps.setCurrentContextandJndi(context, jndi)
-        EnvironmentVars.setCurrentCatalog("")
+        EnvironmentVars.currentCatalog = ""
         EnvironmentProps.setCurrentCatalog("")
-        EnvironmentVars.setCurrentSchema("")
+        EnvironmentVars.currentSchema = ""
         EnvironmentProps.setCurrentSchema("")
         println("Set current connection to context $context and jndi $jndi")
     }
 
     @ShellMethod("Validate the active connection")
     fun validateActiveConnection() {
-        val contextAndJndi = EnvironmentVars.getCurrentContextAndJndi()
+        val contextAndJndi = EnvironmentVars.currentContextAndJndi
         try {
             val ds = JNDIUtils.getDataSource(contextAndJndi.jndi, contextAndJndi.context).left
             ds.connection

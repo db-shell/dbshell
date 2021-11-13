@@ -37,11 +37,11 @@ class QueueTests {
             System.setProperty("org.osjava.sj.delimiter", "/")
         }
         val ctxJndi = EnvironmentProps.getCurrentContextAndJndi()
-        EnvironmentVars.setCurrentContextAndJndi(ctxJndi.context, ctxJndi.jndi)
+        EnvironmentVars.currentContextAndJndi(ctxJndi.context, ctxJndi.jndi)
         val catalog = EnvironmentProps.getCurrentCatalog()
-        EnvironmentVars.setCurrentCatalog(catalog)
+        EnvironmentVars.currentCatalog = catalog
         val schema = EnvironmentProps.getCurrentSchema()
-        EnvironmentVars.setCurrentSchema(schema)
+        EnvironmentVars.currentSchema = schema
 
         val uuid = UUID.randomUUID()
         val sql = "SELECT * from weed_scrape.dispensary"

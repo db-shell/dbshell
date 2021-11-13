@@ -3,6 +3,7 @@ package org.dbshell.commands.connections
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.reflection.utils.DatabaseMetadataUtil
+import org.dbshell.providers.DatabaseMdPrimitiveProvider
 import org.dbshell.ui.TablesUtil
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.ShellComponent
@@ -44,7 +45,7 @@ class ConnectionManager {
                     methodList.map { m ->
                         val retval =
                             try {
-                                m.value.invoke(dbmd)
+                                m.value?.invoke(dbmd)
                             } catch (ex: Exception) {
                                 "Not Supported by this driver"
                             }

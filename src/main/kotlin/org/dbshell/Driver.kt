@@ -8,6 +8,8 @@ import org.dbshell.jobqueue.ResultsQueueConsumer
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+import org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration
 import java.io.File
 import java.io.IOException
 import java.lang.IllegalStateException
@@ -17,7 +19,7 @@ import java.util.concurrent.TimeUnit
 import java.util.logging.LogManager
 import javax.naming.Context
 
-@SpringBootApplication
+@SpringBootApplication(exclude = [R2dbcAutoConfiguration::class])
 class Driver {
 
     //final val executorService = Executors.newFixedThreadPool(4)
@@ -32,11 +34,11 @@ class Driver {
             System.setProperty("org.osjava.sj.delimiter", "/")
         }
         val ctxJndi = EnvironmentProps.getCurrentContextAndJndi()
-        EnvironmentVars.setCurrentContextAndJndi(ctxJndi.context, ctxJndi.jndi)
+        EnvironmentVars.currentContextAndJndi(ctxJndi.context, ctxJndi.jndi)
         val catalog = EnvironmentProps.getCurrentCatalog()
-        EnvironmentVars.setCurrentCatalog(catalog)
+        EnvironmentVars.currentCatalog = catalog
         val schema = EnvironmentProps.getCurrentSchema()
-        EnvironmentVars.setCurrentSchema(schema)
+        EnvironmentVars.currentSchema = schema
 
         //Start listening thread for job queue
         executorService.scheduleWithFixedDelay(JobQueueConsumer(), 1,  1, TimeUnit.SECONDS)

@@ -13,7 +13,7 @@ data class ExportQueryToCsv(val sql: String, val outputFile: File, val separator
         actionList.add(ActionLog("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}..."))
         val conn = ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection
         val stmt = conn.createStatement()
-        stmt.executeQuery(sql).use {rs ->
+        stmt?.executeQuery(sql).use {rs ->
             PrintStream(outputFile).use { ps ->
                 CsvDriver.writeToCsv(rs,ps,includeHeaders)
             }

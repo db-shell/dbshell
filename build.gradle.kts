@@ -112,7 +112,7 @@ dependencies {
     }
     implementation("us.fatehi:schemacrawler:16.15.11")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion)
-    implementation("org.springframework.boot", "spring-boot-starter", "2.4.1")
+    implementation("org.springframework.boot", "spring-boot-starter", "2.5.6")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.logging.log4j",  "log4j-core",  log4jVersion)
@@ -128,6 +128,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
     implementation("com.leansoft", "bigqueue", "0.7.0")
     implementation("io.vavr", "vavr-jackson", "0.10.3")
+    implementation("com.h2database:h2:1.4.200")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation(kotlin("test-junit"))
