@@ -128,7 +128,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
     implementation("com.leansoft", "bigqueue", "0.7.0")
     implementation("io.vavr", "vavr-jackson", "0.10.3")
-    implementation("com.h2database:h2:1.4.200")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation(kotlin("test-junit"))
