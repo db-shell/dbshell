@@ -3,13 +3,13 @@ import java.util.Properties
 import org.apache.commons.io.FileUtils
 
 plugins {
-    kotlin("jvm") version "1.4.10"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.4.21"
+    kotlin("jvm") version "1.5.31"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.5.31"
     // Apply the application plugin to add support for building a CLI application.
     id("java-library")
-    id ("com.github.johnrengelman.shadow").version( "5.1.0")
+    id ("com.github.johnrengelman.shadow").version( "6.1.0")
     id ("distribution")
-    id("net.researchgate.release").version("2.6.0")
+    id("net.researchgate.release").version("2.8.1")
     application
     java
 }
