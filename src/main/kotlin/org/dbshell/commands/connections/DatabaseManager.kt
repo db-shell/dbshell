@@ -1,15 +1,12 @@
 package org.dbshell.commands.connections
 
 import org.apache.commons.io.FileUtils
-import org.bradfordmiller.sqlutils.QueryInfo
-import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.providers.CatalogValueProvider
 import org.dbshell.ui.TablesUtil
-import org.dbshell.providers.JobValueProvider
 import org.dbshell.providers.SchemaValueProvider
 import org.dbshell.providers.TableProvider
 
@@ -23,9 +20,7 @@ import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellMethodAvailability
 import org.springframework.shell.standard.ShellOption
 
-import java.io.BufferedReader
 import java.io.File
-import java.io.StringReader
 import java.nio.file.Files
 import java.util.*
 import org.dbshell.utils.ScriptRunner

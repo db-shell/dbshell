@@ -5,7 +5,6 @@ import org.dbshell.actions.Action
 import org.dbshell.actions.ActionResult
 import org.dbshell.jobqueue.JobQueueWrapper
 import org.dbshell.ui.TablesUtil
-import java.util.*
 
 interface UIManager {
     fun renderResult(result: ActionResult) {
