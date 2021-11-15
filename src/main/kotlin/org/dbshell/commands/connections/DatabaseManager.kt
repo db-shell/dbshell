@@ -99,7 +99,7 @@ class DatabaseManager {
             val currentCatalog = EnvironmentVars.currentCatalog
             val currentSchema = EnvironmentVars.currentSchema
             val tableList = DatabaseMetadata.getTables(dbmd, currentCatalog!!, currentSchema!!, types.toTypedArray())
-            //tableList.sortBy {t -> t.tableName}
+            tableList.sortBy {t -> t.tableName}
 
             val tableHeaders = LinkedHashMap<String, Any>()
             tableHeaders["tableName"] = "Table Name"
