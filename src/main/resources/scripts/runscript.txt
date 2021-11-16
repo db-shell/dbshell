@@ -1,3 +1,4 @@
 export JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005" && cd ~/code/kotlin/dbshell && gradle clean build --refresh-dependencies && cd build/distributions/ && unzip dbshell-0.0.1.zip && cd dbshell-0.0.1 && bin/dbshell
 
 run-query --execute-async --row-limit 50 --sql "SELECT * FROM weed_scrape.dispensary"
+export-query-to-csv --sql "SELECT * FROM weed_scrape.dispensary" --output-file /tmp/csvtest
