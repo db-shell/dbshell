@@ -41,7 +41,7 @@ tasks.create("set-defaults") {
         val source = File("version.properties")
         val dest = File("src/deploy/lib/conf/version.properties")
 
-        org.apache.commons.io.FileUtils.copyFile(source, dest)
+        FileUtils.copyFile(source, dest)
     }
     doLast {
         println("Current software version is $version")
@@ -107,7 +107,7 @@ val jacksonVersion = "2.13.0"
 
 dependencies {
 
-    api("org.bradfordmiller", "simplejndiutils", "0.0.13") {
+    api("org.bradfordmiller", "simplejndiutils", "0.0.14") {
         isTransitive = true
     }
     implementation("us.fatehi:schemacrawler:16.15.11")
@@ -130,7 +130,7 @@ dependencies {
     implementation("io.vavr", "vavr-jackson", "0.10.3")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
-    testImplementation(kotlin("test-junit"))
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.6.0")
 }
 
 java {
