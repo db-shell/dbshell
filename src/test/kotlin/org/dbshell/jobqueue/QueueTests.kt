@@ -1,11 +1,8 @@
 package org.dbshell.jobqueue
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import org.dbshell.actions.RunQuery
+import org.dbshell.actions.sql.RunQuery
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
-import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.util.*

@@ -1,6 +1,9 @@
-package org.dbshell.actions
+package org.dbshell.actions.sql
 
 import io.vavr.control.Either
+import org.dbshell.actions.Action
+import org.dbshell.actions.ActionLog
+import org.dbshell.actions.ActionResult
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.relique.jdbc.csv.CsvDriver
 import java.io.File

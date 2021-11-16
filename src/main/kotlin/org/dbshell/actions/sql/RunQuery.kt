@@ -1,8 +1,10 @@
-package org.dbshell.actions
+package org.dbshell.actions.sql
 
 import io.vavr.control.Either
 import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
+import org.dbshell.actions.Action
+import org.dbshell.actions.ActionResult
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 
 data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {

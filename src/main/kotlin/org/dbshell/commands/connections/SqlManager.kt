@@ -1,8 +1,8 @@
 package org.dbshell.commands.connections
 
-import org.dbshell.actions.ExportQueryToCsv
-import org.dbshell.actions.RunQuery
-import org.dbshell.actions.RunSqlCommands
+import org.dbshell.actions.sql.ExportQueryToCsv
+import org.dbshell.actions.sql.RunQuery
+import org.dbshell.actions.sql.RunSqlCommands
 
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
