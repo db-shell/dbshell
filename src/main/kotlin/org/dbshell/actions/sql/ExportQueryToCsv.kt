@@ -6,6 +6,7 @@ import org.dbshell.actions.ActionLog
 import org.dbshell.actions.ActionResult
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.relique.jdbc.csv.CsvDriver
+import org.relique.jdbc.csv.CsvResultSet
 import java.io.File
 import java.io.PrintStream
 
@@ -16,6 +17,7 @@ data class ExportQueryToCsv(val sql: String, val outputFile: File, val separator
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {conn ->
             conn.createStatement().use {stmt ->
                 stmt?.executeQuery(sql).use { rs ->
+                    val csvRs = CsvResultSet()
                     PrintStream(outputFile).use { ps ->
                         CsvDriver.writeToCsv(rs, ps, includeHeaders)
                     }

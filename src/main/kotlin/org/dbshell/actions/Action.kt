@@ -6,7 +6,11 @@ import java.util.*
 
 typealias ActionResult = Either<List<ActionLog>, Array<Array<Any>>>
 
-data class ActionLog(val event: String, val date: Date = Date())
+data class ActionLog(val event: String, val date: Date = Date()) {
+    override fun toString(): String {
+        return "$date: $event"
+    }
+}
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 interface Action {
