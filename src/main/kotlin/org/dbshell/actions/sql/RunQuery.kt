@@ -5,7 +5,7 @@ import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.actions.Action
 import org.dbshell.actions.ActionResult
-import org.dbshell.commands.connections.dto.ConnectionInfoUtil
+import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 
 data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {
     override fun execute(): ActionResult {

@@ -1,6 +1,6 @@
 package org.dbshell.shellmethods
 
-import org.dbshell.commands.connections.dto.ConnectionInfoUtil
+import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.reflection.utils.DatabaseMetadataUtil
 import org.dbshell.providers.DatabaseMdPrimitiveProvider
@@ -17,9 +17,9 @@ class ConnectionMethods {
 
     data class ConnectionEntries(val key: String, val value: String)
 
-    val connectionHeaders = LinkedHashMap<String, Any>()
-    val schemaHeaders = LinkedHashMap<String, Any>()
-    val catalogHeaders = LinkedHashMap<String, Any>()
+    private final val connectionHeaders = LinkedHashMap<String, Any>()
+    private final val schemaHeaders = LinkedHashMap<String, Any>()
+    private final val catalogHeaders = LinkedHashMap<String, Any>()
 
     init {
         connectionHeaders["key"] = "Connection Property"
@@ -96,7 +96,7 @@ class ConnectionMethods {
     @ShellMethod("List Schemas in active connections database")
     fun getAllSchemas() {
         try {
-            ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {connection ->
+            ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
                 val dbmd = connection.metaData
                 val entries = DatabaseMetadata.getSchemas(dbmd)
                 TablesUtil.renderAttributeTable(schemaHeaders, entries)

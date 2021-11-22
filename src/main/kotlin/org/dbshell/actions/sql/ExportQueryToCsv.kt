@@ -5,13 +5,9 @@ import io.vavr.control.Either
 import org.dbshell.actions.Action
 import org.dbshell.actions.ActionLog
 import org.dbshell.actions.ActionResult
-import org.dbshell.commands.connections.dto.ConnectionInfoUtil
-import org.relique.jdbc.csv.CsvDriver
-import org.relique.jdbc.csv.CsvResultSet
+import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import java.io.File
-import java.io.PrintStream
 import java.io.PrintWriter
-import java.io.StringWriter
 
 data class ExportQueryToCsv(
     val sql: String,
@@ -28,7 +24,7 @@ data class ExportQueryToCsv(
         actionList.add(
             ActionLog("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}...")
         )
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {conn ->
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { conn ->
             conn.createStatement().use {stmt ->
                 stmt?.executeQuery(sql).use { rs ->
                     PrintWriter(outputFile).use { pw ->

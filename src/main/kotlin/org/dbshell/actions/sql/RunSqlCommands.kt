@@ -4,7 +4,7 @@ import io.vavr.control.Either
 import org.dbshell.actions.Action
 import org.dbshell.actions.ActionLog
 import org.dbshell.actions.ActionResult
-import org.dbshell.commands.connections.dto.ConnectionInfoUtil
+import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.utils.ScriptRunner
 
 data class RunSqlCommands(val sql: String): Action {

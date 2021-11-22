@@ -25,7 +25,7 @@ object DatabaseMetadataUtil {
                             .replace("SQL", "Sql")
                             .replace("URL", "url")
                         val formattedName =
-                            name.trim { it <= ' ' }.substring(0, 1).toUpperCase() + name.substring(1)
+                            name.trim { it <= ' ' }.substring(0, 1).uppercase() + name.substring(1)
                         formattedName
                     },
                     { m: Method? -> m }

@@ -1,6 +1,6 @@
 package org.dbshell.providers
 
-import org.dbshell.commands.connections.dto.ConnectionInfoUtil
+import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.springframework.core.MethodParameter
 import org.springframework.shell.CompletionContext

@@ -1,4 +1,4 @@
-package org.dbshell.commands.connections.dto
+package org.dbshell.shellmethods.dto
 
 import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.dbshell.environment.EnvironmentVars

@@ -1,7 +1,7 @@
 package org.dbshell.shellmethods
 
 import org.apache.commons.io.FileUtils
-import org.dbshell.commands.connections.dto.ConnectionInfoUtil
+import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
@@ -33,7 +33,7 @@ class DatabaseMethods {
     }
 
     fun getCatalogAvailability(): Availability {
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {connection ->
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val dbmd = connection.metaData
             if(DatabaseMetadata.getCatalogs(dbmd).size > 0) {
                 return Availability.available()
@@ -44,7 +44,7 @@ class DatabaseMethods {
     }
 
     fun getSchemaAvailability(): Availability {
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {connection ->
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val dbmd = connection.metaData
             if(DatabaseMetadata.getSchemas(dbmd).size > 0) {
                 return Availability.available()
@@ -158,7 +158,7 @@ class DatabaseMethods {
     @ShellMethod("Run sql script")
     fun runSqlScript(scriptFile: File) {
         println("Executing script ${scriptFile.absolutePath}...")
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {connection ->
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val content = String(Files.readAllBytes(scriptFile.toPath()))
             ScriptRunner.executeScript(content, connection)
         }
