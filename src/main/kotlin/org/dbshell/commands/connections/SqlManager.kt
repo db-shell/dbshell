@@ -8,7 +8,7 @@ import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
 import java.io.File
-
+//'"'
 @ShellComponent
 class SqlManager: UIManager {
     @ShellMethod("Run a SQL query")
@@ -21,11 +21,15 @@ class SqlManager: UIManager {
         sql: String,
         outputFile: File,
         @ShellOption(defaultValue = ",") separator: String,
+        @ShellOption(defaultValue = "\"") quoteChar: String,
+        @ShellOption(defaultValue = "\"") escapeChar: String,
+        @ShellOption(defaultValue = "\n") lineEndChar: String,
         @ShellOption(defaultValue = "true") includeHeaders: Boolean,
-        @ShellOption(defaultValue = ".csv") fileExtension: String,
         @ShellOption(defaultValue = "false") executeAsync: Boolean
     )  {
-        val exportCsv = ExportQueryToCsv(sql, outputFile, separator, includeHeaders, fileExtension)
+        val exportCsv =
+            ExportQueryToCsv(sql, outputFile, separator, quoteChar, escapeChar, lineEndChar, includeHeaders)
+
         executeAction(exportCsv, executeAsync)
     }
     @ShellMethod("Run SQL commands")
