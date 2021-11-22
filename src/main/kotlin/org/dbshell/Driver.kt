@@ -17,11 +17,12 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import java.util.logging.LogManager
 import javax.naming.Context
+import kotlin.system.exitProcess
 
 @SpringBootApplication(exclude = [R2dbcAutoConfiguration::class])
 class Driver {
 
-    final val executorService: ScheduledExecutorService = Executors.newScheduledThreadPool(4)
+    private final val executorService: ScheduledExecutorService = Executors.newScheduledThreadPool(4)
 
     init {
         if(!File("conf/jndi.properties").isFile) {
@@ -79,6 +80,12 @@ class Driver {
                 logger.info("Job queue successfully closed.")
             } catch(iox: IOException) {
                 logger.error("Error occurred closing the job queue: ${iox.message}")
+            }
+            logger.info("Stopping application...")
+            try {
+                exitProcess(0)
+            } catch(rex: RuntimeException) {
+                logger.info("Error occurred closing the application: ${rex.message}")
             }
         }
     }

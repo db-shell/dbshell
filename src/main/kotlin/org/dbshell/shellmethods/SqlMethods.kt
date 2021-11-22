@@ -1,5 +1,6 @@
-package org.dbshell.commands.connections
+package org.dbshell.shellmethods
 
+import org.dbshell.actions.ActionExecutor
 import org.dbshell.actions.sql.ExportQueryToCsv
 import org.dbshell.actions.sql.RunQuery
 import org.dbshell.actions.sql.RunSqlCommands
@@ -8,13 +9,14 @@ import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
 import java.io.File
-//'"'
+
 @ShellComponent
-class SqlManager: UIManager {
+class SqlMethods: ActionExecutor {
     @ShellMethod("Run a SQL query")
     fun runQuery(sql: String, rowLimit: Long =  50, @ShellOption(defaultValue = "false") executeAsync: Boolean) {
         val rq = RunQuery(sql, rowLimit)
-        executeAction(rq, executeAsync)
+        val result = executeAction(rq, executeAsync)
+        renderResult(result)
     }
     @ShellMethod("Export SQL query to csv")
     fun exportQueryToCsv(
@@ -30,11 +32,13 @@ class SqlManager: UIManager {
         val exportCsv =
             ExportQueryToCsv(sql, outputFile, separator, quoteChar, escapeChar, lineEndChar, includeHeaders)
 
-        executeAction(exportCsv, executeAsync)
+        val result = executeAction(exportCsv, executeAsync)
+        renderResult(result)
     }
     @ShellMethod("Run SQL commands")
     fun runSqlCommands(sql: String, @ShellOption(defaultValue = "false") executeAsync: Boolean) {
         val runSqlCommands = RunSqlCommands(sql)
-        executeAction(runSqlCommands, executeAsync)
+        val result = executeAction(runSqlCommands, executeAsync)
+        renderResult(result)
     }
 }

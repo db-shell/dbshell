@@ -1,4 +1,4 @@
-package org.dbshell.commands.connections
+package org.dbshell.shellmethods
 
 import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.dbshell.environment.EnvironmentProps
@@ -13,12 +13,12 @@ import javax.naming.InitialContext
 import java.util.*
 
 @ShellComponent
-class JndiManager {
+class JndiMethods {
 
     data class JndiEntries(val key: String, val value: String)
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JndiManager::class.java)
+        private val logger = LoggerFactory.getLogger(JndiMethods::class.java)
     }
 
     @ShellMethod("Add Database Connection")
@@ -58,7 +58,7 @@ class JndiManager {
         try {
             val initCtx = InitialContext()
             val mc = JNDIUtils.getMemoryContextFromInitContext(initCtx, context)
-            val entries = JNDIUtils.getEntriesForJndiContext(mc).map{kvp -> JndiEntries(kvp.key, kvp.value)}.toList()
+            val entries = JNDIUtils.getEntriesForJndiContext(mc).map{kvp -> JndiEntries(kvp.key, kvp.value) }.toList()
 
             val headers = LinkedHashMap<String, Any>()
             headers["key"] = "Jndi Entry"

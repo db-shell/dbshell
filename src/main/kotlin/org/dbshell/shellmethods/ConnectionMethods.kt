@@ -1,4 +1,4 @@
-package org.dbshell.commands.connections
+package org.dbshell.shellmethods
 
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
@@ -13,7 +13,7 @@ import java.sql.SQLException
 import java.util.*
 
 @ShellComponent
-class ConnectionManager {
+class ConnectionMethods {
 
     data class ConnectionEntries(val key: String, val value: String)
 
@@ -29,11 +29,11 @@ class ConnectionManager {
     }
 
     companion object {
-        private val logger = LoggerFactory.getLogger(ConnectionManager::class.java)
+        private val logger = LoggerFactory.getLogger(ConnectionMethods::class.java)
 
         private fun getFormattedPrimitivesFromDbMetadata(): Set<ConnectionEntries> {
 
-            val connectionInfo = ConnectionInfoUtil.getConnectionFromCurrentContextJndi()   //getConnectionFromCurrentContextJndi()
+            val connectionInfo = ConnectionInfoUtil.getConnectionFromCurrentContextJndi()
 
             return try {
 

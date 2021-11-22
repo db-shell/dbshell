@@ -25,7 +25,9 @@ data class ExportQueryToCsv(
 ): Action {
     override fun execute(): ActionResult {
         var actionList = mutableListOf<ActionLog>()
-        actionList.add(ActionLog("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}..."))
+        actionList.add(
+            ActionLog("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}...")
+        )
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {conn ->
             conn.createStatement().use {stmt ->
                 stmt?.executeQuery(sql).use { rs ->

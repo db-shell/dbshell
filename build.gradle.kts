@@ -128,6 +128,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
     implementation("com.leansoft", "bigqueue", "0.7.0")
     implementation("io.vavr", "vavr-jackson", "0.10.3")
+    implementation("io.vavr", "vavr", "0.10.4")
     implementation("com.opencsv:opencsv:5.5.2")
     api("org.bradfordmiller:sqlutils:0.0.4")
 

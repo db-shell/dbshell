@@ -1,4 +1,4 @@
-package org.dbshell.commands.connections
+package org.dbshell.shellmethods
 
 import org.apache.commons.io.FileUtils
 import org.dbshell.commands.connections.dto.ConnectionInfoUtil
@@ -26,10 +26,10 @@ import java.util.*
 import org.dbshell.utils.ScriptRunner
 
 @ShellComponent
-class DatabaseManager {
+class DatabaseMethods {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(ConnectionManager::class.java)
+        private val logger = LoggerFactory.getLogger(DatabaseMethods::class.java)
     }
 
     fun getCatalogAvailability(): Availability {
