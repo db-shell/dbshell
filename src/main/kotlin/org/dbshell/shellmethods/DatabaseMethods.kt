@@ -1,6 +1,7 @@
 package org.dbshell.shellmethods
 
 import org.apache.commons.io.FileUtils
+import org.apache.commons.lang3.CharSet
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.environment.EnvironmentProps
@@ -150,7 +151,9 @@ class DatabaseMethods {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val dslContext = DSL.using(connection, Settings().withRenderFormatted(true))
             val ddl = dslContext.ddl(dslContext.meta().tables)
-            ddl.queries().forEach {q -> FileUtils.writeStringToFile(scriptFile, q.sql, true)}
+            ddl.queries().forEach {q ->
+                FileUtils.writeStringToFile(scriptFile, q.sql, "ISO-8859-1", true)
+            }
         }
         println("Generating ddl complete. Please see file ${scriptFile.absolutePath}.")
     }

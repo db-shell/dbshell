@@ -1,7 +1,6 @@
 package org.dbshell.jobqueue
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.vavr.jackson.datatype.VavrModule
 import org.dbshell.actions.Action
@@ -14,9 +13,9 @@ data class Result(val id: UUID, val result: ActionResult)
 
 class JobQueueWrapper {
     companion object {
-
-        val df = SimpleDateFormat("yyyy-MM-dd HH:mm a z")
-        private val om = ObjectMapper().registerModule(KotlinModule()).setDateFormat(df)
+        private val kotlinModule = KotlinModule.Builder().build()
+        private val df = SimpleDateFormat("yyyy-MM-dd HH:mm a z")
+        private val om = ObjectMapper().registerModule(kotlinModule).setDateFormat(df)
 
         fun put(action: Action): UUID {
             val uuid = UUID.randomUUID()
@@ -43,11 +42,12 @@ class JobQueueWrapper {
 class ResultQueueWrapper {
     companion object {
 
-        val df = SimpleDateFormat("yyyy-MM-dd HH:mm a z")
+        private val kotlinModule = KotlinModule.Builder().build()
+        private val df = SimpleDateFormat("yyyy-MM-dd HH:mm a z")
 
         private val om =
             ObjectMapper()
-                .registerModule(KotlinModule())
+                .registerModule(kotlinModule)
                 .registerModule(VavrModule())
                 .setDateFormat(df)
 

@@ -15,7 +15,6 @@ class QueueTests {
         val sql = "SELECT * from dispensary"
         val rowLimit = 50L
         val rq = RunQuery(sql, rowLimit)
-        val jobId = JobQueueWrapper.put(rq)
 
         val payload = JobQueueWrapper.get()
         val action = payload?.action
