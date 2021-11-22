@@ -119,6 +119,7 @@ dependencies {
     implementation("org.apache.logging.log4j",  "log4j-api",  log4jVersion)
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
     implementation("org.postgresql", "postgresql", "42.3.1")
+    implementation("org.xerial:sqlite-jdbc:3.36.0.3")
     implementation("org.jooq", "jooq", "3.15.4")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
     implementation("org.mybatis", "mybatis", "3.5.7")
