@@ -104,6 +104,7 @@ release {
 val log4jVersion = "2.14.1"
 val springVersion = "2.0.1.RELEASE"
 val jacksonVersion = "2.13.0"
+val springBootVersion = "2.5.6"
 
 dependencies {
 
@@ -112,7 +113,8 @@ dependencies {
     }
     implementation("us.fatehi:schemacrawler:16.15.11")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion)
-    implementation("org.springframework.boot", "spring-boot-starter", "2.5.6")
+    implementation("org.springframework.boot", "spring-boot-starter", springBootVersion)
+    implementation("org.springframework.boot", "spring-boot-starter-test", springBootVersion)
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.apache.logging.log4j",  "log4j-core",  log4jVersion)
