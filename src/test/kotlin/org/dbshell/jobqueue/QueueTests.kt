@@ -12,7 +12,7 @@ class QueueTests {
 
     @Test
     fun testJobQueue() {
-        val sql = "SELECT * from dispensary"
+        val sql = "SELECT * from weed_scrape.dispensary"
         val rowLimit = 50L
         val rq = RunQuery(sql, rowLimit)
 
