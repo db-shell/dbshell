@@ -36,7 +36,6 @@ class ExportQueryToCsvTest: BaseCommandTest() {
     }
 
     private val COMMAND_CLASS_UNDER_TEST: Class<SqlMethods> = SqlMethods::class.java
-    private val registry = ConfigurableCommandRegistry()
 
     @Autowired
     private val shell: Shell? = null
@@ -52,7 +51,7 @@ class ExportQueryToCsvTest: BaseCommandTest() {
         val commandMethodRunTime = commandTarget?.method
         val isAvailable = commandTarget?.availability?.isAvailable
 
-        val jndiResult = shell.evaluate{"set-active-connection --context default_ds --jndi SqliteChinook"}
+        shell.evaluate{"set-active-connection --context default_ds --jndi SqliteChinook"}
         val sql = "SELECT\t*\tFROM\talbums"
         val result = shell.evaluate { "$command --sql $sql --output-file src/test/resources/data/outputData/csvtest.csv" }
         println(result)
