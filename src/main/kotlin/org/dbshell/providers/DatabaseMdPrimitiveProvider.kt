@@ -21,7 +21,6 @@ class DatabaseMdPrimitiveProvider: ValueProviderSupport() {
 
         val currentInput = completionContext?.currentWordUpToCursor()
         val ctxJndi = EnvironmentVars.currentContextAndJndi
-
         val dbmd = JNDIUtils.getJndiConnection(ctxJndi.jndi, ctxJndi.context).metaData
 
         return DatabaseMetadataUtil.getPrimitivesFromDBMetadata(dbmd)

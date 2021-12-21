@@ -5,6 +5,7 @@ import org.bradfordmiller.sqlutils.QueryInfo
 import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.actions.Action
 import org.dbshell.actions.ActionResult
+import org.dbshell.actions.UIArrayResult
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 
 data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {
@@ -30,6 +31,7 @@ data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {
                 println(e.message)
             }
         }
-        return Either.right(values.map { v -> v.values.toTypedArray()}.toTypedArray())
+        val data = UIArrayResult(values.map { v -> v.values.toTypedArray()}.toTypedArray())
+        return Either.right(data)
     }
 }
