@@ -83,7 +83,9 @@ class ConnectionMethods {
     }
 
     @ShellMethod("Get specific attribute of active connection information")
-    fun getCurrentConnectionAttributeInfo(@ShellOption(valueProvider = DatabaseMdPrimitiveProvider::class) attributeName: String) {
+    fun getCurrentConnectionAttributeInfo(
+        @ShellOption(valueProvider = DatabaseMdPrimitiveProvider::class
+        ) attributeName: String) {
         try {
             val entries = getFormattedPrimitivesFromDbMetadata()
             val entryAttribute = entries.filter {ce -> ce.key == attributeName}

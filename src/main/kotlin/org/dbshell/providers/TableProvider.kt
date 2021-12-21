@@ -9,7 +9,12 @@ import org.springframework.shell.CompletionProposal
 import org.springframework.shell.standard.ValueProviderSupport
 
 class TableProvider: ValueProviderSupport() {
-    override fun complete(parameter: MethodParameter?, completionContext: CompletionContext?, hints: Array<out String>?): MutableList<CompletionProposal> {
+    override fun complete(
+        parameter: MethodParameter?,
+        completionContext: CompletionContext?,
+        hints: Array<out String>?
+    ): MutableList<CompletionProposal> {
+
         val currentInput = completionContext?.currentWord()
         val types = arrayOf("TABLE")
         val dbmd = ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.metaData

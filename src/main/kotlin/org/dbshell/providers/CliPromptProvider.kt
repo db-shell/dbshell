@@ -39,6 +39,9 @@ class CliPromptProvider: PromptProvider {
                 "schema:$schema"
             }
 
-        return AttributedString("db-shell $currentContext::$currentJndi::$currentCatalog::$currentSchema :>", AttributedStyle.DEFAULT.foreground(AttributedStyle.BLUE))
+        return AttributedString(
+            "db-shell $currentContext::$currentJndi::$currentCatalog::$currentSchema :>",
+            AttributedStyle.DEFAULT.foreground(AttributedStyle.BLUE)
+        )
     }
 }

@@ -16,7 +16,12 @@ class JndiValueProvider: ValueProviderSupport() {
         val word = words?.get(wordIdx!!)
         return word.equals("--jndi") || word.equals("--context")
     }
-    override fun complete(parameter: MethodParameter?, completionContext: CompletionContext?, hints: Array<out String>?): MutableList<CompletionProposal> {
+    override fun complete(
+        parameter: MethodParameter?,
+        completionContext: CompletionContext?,
+        hints: Array<out String>?
+    ): MutableList<CompletionProposal> {
+
         val currentInput = completionContext?.currentWord()
         val words = completionContext?.words
         val initCtx = InitialContext()

@@ -15,7 +15,11 @@ object DatabaseMetadataUtil {
             .filter { m: Method ->
                 val modifier = m.modifiers
                 m.parameterCount == 0 && Modifier.isPublic(modifier) &&
-                (m.returnType == String::class.java || m.returnType == Integer.TYPE || m.returnType == Boolean.TYPE || m.returnType == java.lang.Long.TYPE)
+                (m.returnType == String::class.java ||
+                        m.returnType == Integer.TYPE ||
+                        m.returnType == Boolean.TYPE ||
+                        m.returnType == java.lang.Long.TYPE
+                        )
             }.collect(
                 Collectors.toMap(
                     { n: Method ->

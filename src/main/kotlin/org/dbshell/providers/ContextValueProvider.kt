@@ -11,7 +11,12 @@ import java.io.File
 
 @Component
 class ContextValueProvider: ValueProviderSupport() {
-    override fun complete(parameter: MethodParameter?, completionContext: CompletionContext?, hints: Array<out String>?): MutableList<CompletionProposal> {
+    override fun complete(
+        parameter: MethodParameter?,
+        completionContext: CompletionContext?,
+        hints: Array<out String>?
+    ): MutableList<CompletionProposal> {
+
         val currentInput = completionContext?.currentWordUpToCursor()
         return JNDIUtils.getAvailableJndiContexts(null)
             .filter{c -> c.contains(currentInput!!)}

@@ -109,7 +109,8 @@ class JndiMethods {
             ds.connection
             println("Successfully validated current active connection.")
         } catch (sqlEx: Exception) {
-            val message = "Error when creating connection to context ${contextAndJndi.context} and jndi ${contextAndJndi.jndi}: ${sqlEx.message}"
+            val message =
+                "Error when creating connection to context ${contextAndJndi.context} and jndi ${contextAndJndi.jndi}: ${sqlEx.message}"
             logger.error(message)
         }
     }

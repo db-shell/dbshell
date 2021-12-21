@@ -9,7 +9,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class JobValueProvider: ValueProviderSupport() {
-    override fun complete(parameter: MethodParameter?, completionContext: CompletionContext?, hints: Array<out String>?): MutableList<CompletionProposal> {
+    override fun complete(
+        parameter: MethodParameter?,
+        completionContext: CompletionContext?,
+        hints: Array<out String>?
+    ): MutableList<CompletionProposal> {
+
         val currentInput = completionContext?.currentWordUpToCursor()
         return ResultsHashMap
             .resultsMap.keys()

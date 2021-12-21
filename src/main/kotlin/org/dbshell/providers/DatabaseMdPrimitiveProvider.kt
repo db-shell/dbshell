@@ -13,7 +13,12 @@ import java.io.File
 
 @Component
 class DatabaseMdPrimitiveProvider: ValueProviderSupport() {
-    override fun complete(parameter: MethodParameter?, completionContext: CompletionContext?, hints: Array<out String>?): MutableList<CompletionProposal> {
+    override fun complete(
+        parameter: MethodParameter?,
+        completionContext: CompletionContext?,
+        hints: Array<out String>?
+    ): MutableList<CompletionProposal> {
+
         val currentInput = completionContext?.currentWordUpToCursor()
         val ctxJndi = EnvironmentVars.currentContextAndJndi
 
