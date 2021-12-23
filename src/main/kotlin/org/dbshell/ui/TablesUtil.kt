@@ -4,7 +4,16 @@ import org.springframework.shell.table.*
 import java.util.*
 
 class TablesUtil {
+
     companion object {
+
+        val connectionHeaders = LinkedHashMap<String, Any>()
+
+        init {
+            connectionHeaders["key"] = "Connection Property"
+            connectionHeaders["value"] = "Value"
+        }
+
         fun <T> renderAttributeTable(headers: LinkedHashMap<String, Any>, iter: Iterable<T>) {
             val model = BeanListTableModel(iter, headers)
             renderTable(model)
