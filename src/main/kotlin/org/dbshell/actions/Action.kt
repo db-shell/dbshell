@@ -8,16 +8,7 @@ import org.dbshell.jobqueue.JobQueueWrapper
 import org.dbshell.ui.TablesUtil
 import java.util.*
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
-interface UIResult
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
-data class UIArrayResult(val data: Array<Array<Any>>): UIResult
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
-data class UIBeanArrayResult<T>(val headers: LinkedHashMap<String, Any>, val iter: Iterable<T>): UIResult
-
-typealias ActionResult = Either<List<ActionLog>, UIResult>
+typealias ActionResult = Either<List<ActionLog>, Array<Array<Any>>>
 
 data class ActionLog(val event: String, val date: Date = Date()) {
     override fun toString(): String {
@@ -63,14 +54,8 @@ interface ActionRenderer {
                 actionLog.forEach { println(it) }
             }
             is Either.Right -> {
-                when(val ui = result.get()) {
-                    is UIArrayResult -> {
-                        TablesUtil.renderAttributeTable(ui.data)
-                    }
-                    is UIBeanArrayResult<*> -> {
-                        TablesUtil.renderAttributeTable(ui.headers, ui.iter)
-                    }
-                }
+                val dataArray = result.get()
+                TablesUtil.renderAttributeTable(dataArray)
             }
         }
     }
