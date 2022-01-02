@@ -9,7 +9,7 @@ import javax.naming.InitialContext
 
 data class GetEntries(val context: String): Action {
     override fun execute(): ActionResult {
-        val values: MutableList<Map<String, Any>> = mutableListOf(mutableMapOf("Jndi Entry" to "Jndi Entry", "Value" to "Value"))
+        val values: MutableList<Map<String, Any?>> = mutableListOf(mutableMapOf("Jndi Entry" to "Jndi Entry", "Value" to "Value"))
         val initCtx = InitialContext()
         val mc = JNDIUtils.getMemoryContextFromInitContext(initCtx, context)
         val entries = JNDIUtils.getEntriesForJndiContext(mc).map{ kvp -> JndiMethods.JndiEntries(kvp.key, kvp.value) }.toList()

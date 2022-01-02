@@ -8,7 +8,7 @@ import org.dbshell.jobqueue.JobQueueWrapper
 import org.dbshell.ui.TablesUtil
 import java.util.*
 
-typealias ActionResult = Either<List<ActionLog>, Array<Array<Any>>>
+typealias ActionResult = Either<List<ActionLog>, Array<Array<Any?>>>
 
 data class ActionLog(val event: String, val date: Date = Date()) {
     override fun toString(): String {

@@ -10,7 +10,7 @@ import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {
     override fun execute(): ActionResult {
         var rowCount = 0L
-        lateinit var values: MutableList<Map<String, Any>>
+        lateinit var values: MutableList<Map<String, Any?>>
         lateinit var qi: QueryInfo
         lateinit var columns: Map<Int, String>
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->

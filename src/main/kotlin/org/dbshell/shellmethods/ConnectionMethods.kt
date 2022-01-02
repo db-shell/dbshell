@@ -4,6 +4,7 @@ import org.dbshell.actions.ActionExecutor
 import org.dbshell.actions.connection.GetActiveConnectionInfo
 import org.dbshell.actions.db.GetAllCatalogs
 import org.dbshell.actions.db.GetAllSchemas
+import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.providers.DatabaseMdPrimitiveProvider
 import org.springframework.shell.standard.ShellComponent
@@ -43,7 +44,8 @@ class ConnectionMethods: ActionExecutor {
     fun getAllSchemas(@ShellOption(defaultValue = "false") executeAsync: Boolean) {
         try {
             ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-                val getSchemas = GetAllSchemas(connection.metaData)
+                val entries = DatabaseMetadata.getSchemas(connection.metaData)
+                val getSchemas = GetAllSchemas(entries)
                 val result = executeAction(getSchemas, executeAsync)
                 renderResult(result)
             }
@@ -56,7 +58,8 @@ class ConnectionMethods: ActionExecutor {
     fun getAllCatalogs(@ShellOption(defaultValue = "false") executeAsync: Boolean) {
         try {
             ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-                val getCatalogs = GetAllCatalogs(connection.metaData)
+                val entries = DatabaseMetadata.getCatalogs(connection.metaData)
+                val getCatalogs = GetAllCatalogs(entries)
                 val result = executeAction(getCatalogs, executeAsync)
                 renderResult(result)
             }

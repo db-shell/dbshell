@@ -88,7 +88,23 @@ class DatabaseMethods: ActionExecutor {
         @ShellOption(defaultValue = "false") executeAsync: Boolean
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            val getTables = GetAllTables(connection.metaData, includeViews, includeAll)
+
+            val types = mutableSetOf("TABLE")
+
+            if(includeViews)
+                types += "VIEW"
+
+            if(includeAll) {
+                types += "SYSTEM TABLE"
+                types += "MATERIALIZED QUERY TABLE"
+                types += "ALIAS"
+            }
+
+            val currentCatalog = EnvironmentVars.currentCatalog
+            val currentSchema = EnvironmentVars.currentSchema
+            val entries = DatabaseMetadata.getTables(connection.metaData, currentCatalog!!, currentSchema!!, types.toTypedArray())
+            entries.sortBy {t -> t.tableName}
+            val getTables = GetAllTables(entries)
             val result = executeAction(getTables, executeAsync)
             renderResult(result)
         }
@@ -100,7 +116,10 @@ class DatabaseMethods: ActionExecutor {
         @ShellOption(defaultValue = "false") executeAsync: Boolean
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            val getAllTableColumns = GetAllTableColumns(table, connection.metaData)
+            val currentCatalog = EnvironmentVars.currentCatalog
+            val currentSchema = EnvironmentVars.currentSchema
+            val entries = DatabaseMetadata.getColumns(connection.metaData, currentCatalog!!, currentSchema!!, table)
+            val getAllTableColumns = GetAllTableColumns(table, entries)
             val result = executeAction(getAllTableColumns, executeAsync)
             renderResult(result)
         }

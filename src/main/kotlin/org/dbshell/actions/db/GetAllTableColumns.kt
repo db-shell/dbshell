@@ -3,13 +3,11 @@ package org.dbshell.actions.db
 import io.vavr.control.Either
 import org.dbshell.actions.Action
 import org.dbshell.actions.ActionResult
-import org.dbshell.db.metadata.DatabaseMetadata
-import org.dbshell.environment.EnvironmentVars
-import java.sql.DatabaseMetaData
+import org.dbshell.db.metadata.dto.Column
 
-data class GetAllTableColumns(val tableName: String, val dbmd: DatabaseMetaData): Action {
+data class GetAllTableColumns(val tableName: String, val entries: List<Column>): Action {
     override fun execute(): ActionResult {
-        val values: MutableList<Map<String, Any>> =
+        val values: MutableList<Map<String, Any?>> =
             mutableListOf(
                 mutableMapOf(
                     "Column Name" to "Column Name",
@@ -25,10 +23,6 @@ data class GetAllTableColumns(val tableName: String, val dbmd: DatabaseMetaData)
                     "Foreign Key Description" to "Foreign Key Description"
                 )
             )
-
-        val currentCatalog = EnvironmentVars.currentCatalog
-        val currentSchema = EnvironmentVars.currentSchema
-        val entries = DatabaseMetadata.getColumns(dbmd, currentCatalog!!, currentSchema!!, tableName)
 
         entries.forEach {entry ->
             values.add(

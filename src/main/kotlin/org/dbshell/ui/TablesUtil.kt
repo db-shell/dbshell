@@ -5,7 +5,7 @@ import java.util.*
 
 class TablesUtil {
     companion object {
-        fun renderAttributeTable(data: Array<Array<Any>>) {
+        fun renderAttributeTable(data: Array<Array<Any?>>) {
             val model = ArrayTableModel(data)
             renderTable(model)
         }
