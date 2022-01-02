@@ -84,22 +84,24 @@ class DatabaseMethods: ActionExecutor {
     @ShellMethod("List all tables for the active connection and catalog")
     fun getTables(
         includeViews: Boolean = false,
-        includeAll: Boolean = false
+        includeAll: Boolean = false,
+        @ShellOption(defaultValue = "false") executeAsync: Boolean
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val getTables = GetAllTables(connection.metaData, includeViews, includeAll)
-            val result = executeAction(getTables)
+            val result = executeAction(getTables, executeAsync)
             renderResult(result)
         }
     }
 
     @ShellMethod("Get column info for table")
     fun getTableColumns(
-        @ShellOption(valueProvider = TableProvider::class) table: String
+        @ShellOption(valueProvider = TableProvider::class) table: String,
+        @ShellOption(defaultValue = "false") executeAsync: Boolean
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val getAllTableColumns = GetAllTableColumns(table, connection.metaData)
-            val result = executeAction(getAllTableColumns)
+            val result = executeAction(getAllTableColumns, executeAsync)
             renderResult(result)
         }
     }

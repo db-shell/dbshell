@@ -56,10 +56,13 @@ class JndiMethods: ActionExecutor {
     }
 
     @ShellMethod("List database entries from a context")
-    fun listEntries(@ShellOption(valueProvider = ContextValueProvider::class) context: String) {
+    fun listEntries(
+        @ShellOption(valueProvider = ContextValueProvider::class) context: String,
+        @ShellOption(defaultValue = "false") executeAsync: Boolean
+    ) {
         try {
             val getEntries = GetEntries(context)
-            val result = executeAction(getEntries)
+            val result = executeAction(getEntries, executeAsync)
             renderResult(result)
         } catch(e: Exception) {
             logger.error("Error when accessing entries for context $context: ${e.message}")

@@ -46,11 +46,11 @@ class ConnectionMethods: ActionExecutor {
     }
 
     @ShellMethod("List Schemas in active connections database")
-    fun getAllSchemas() {
+    fun getAllSchemas(@ShellOption(defaultValue = "false") executeAsync: Boolean) {
         try {
             ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
                 val getSchemas = GetAllSchemas(connection.metaData)
-                val result = executeAction(getSchemas)
+                val result = executeAction(getSchemas, executeAsync)
                 renderResult(result)
             }
         } catch (ex: Exception) {
@@ -59,11 +59,11 @@ class ConnectionMethods: ActionExecutor {
     }
 
     @ShellMethod("List all catalogs in active connections database")
-    fun getAllCatalogs() {
+    fun getAllCatalogs(@ShellOption(defaultValue = "false") executeAsync: Boolean) {
         try {
             ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
                 val getCatalogs = GetAllCatalogs(connection.metaData)
-                val result = executeAction(getCatalogs)
+                val result = executeAction(getCatalogs, executeAsync)
                 renderResult(result)
             }
         } catch (ex: Exception) {
