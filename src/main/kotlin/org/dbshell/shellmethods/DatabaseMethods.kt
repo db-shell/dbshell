@@ -1,7 +1,9 @@
 package org.dbshell.shellmethods
 
 import org.apache.commons.io.FileUtils
-import org.apache.commons.lang3.CharSet
+import org.dbshell.actions.ActionExecutor
+import org.dbshell.actions.db.GetAllTableColumns
+import org.dbshell.actions.db.GetAllTables
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.environment.EnvironmentProps
@@ -27,7 +29,7 @@ import java.util.*
 import org.dbshell.utils.ScriptRunner
 
 @ShellComponent
-class DatabaseMethods {
+class DatabaseMethods: ActionExecutor {
 
     companion object {
         private val logger = LoggerFactory.getLogger(DatabaseMethods::class.java)
@@ -85,27 +87,9 @@ class DatabaseMethods {
         includeAll: Boolean = false
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            val types = mutableSetOf("TABLE")
-
-            if(includeViews)
-                types += "VIEW"
-
-            if(includeAll) {
-                types += "SYSTEM TABLE"
-                types += "MATERIALIZED QUERY TABLE"
-                types += "ALIAS"
-            }
-
-            val dbmd = connection.metaData
-            val currentCatalog = EnvironmentVars.currentCatalog
-            val currentSchema = EnvironmentVars.currentSchema
-            val tableList = DatabaseMetadata.getTables(dbmd, currentCatalog!!, currentSchema!!, types.toTypedArray())
-            tableList.sortBy {t -> t.tableName}
-
-            val tableHeaders = LinkedHashMap<String, Any>()
-            tableHeaders["tableName"] = "Table Name"
-            tableHeaders["tableType"] = "Table Type"
-            TablesUtil.renderAttributeTable(tableHeaders, tableList)
+            val getTables = GetAllTables(connection.metaData, includeViews, includeAll)
+            val result = executeAction(getTables)
+            renderResult(result)
         }
     }
 
@@ -114,23 +98,9 @@ class DatabaseMethods {
         @ShellOption(valueProvider = TableProvider::class) table: String
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            val dbmd = connection.metaData
-            val currentCatalog = EnvironmentVars.currentCatalog
-            val currentSchema = EnvironmentVars.currentSchema
-            val columnList = DatabaseMetadata.getColumns(dbmd, currentCatalog!!, currentSchema!!, table)
-            val columnHeaders = LinkedHashMap<String, Any>()
-            columnHeaders["columnName"] = "Column Name"
-            columnHeaders["typeName"] = "Type Name"
-            columnHeaders["columnSize"] = "Column Size"
-            columnHeaders["decimalDigits"] = "Decimal Digits"
-            columnHeaders["precision"] = "Precision"
-            columnHeaders["isNullable"] = "Is Nullable"
-            columnHeaders["comments"] = "Comments"
-            columnHeaders["defaultValue"] = "Default Value"
-            columnHeaders["isPrimaryKey"] = "Is Primary Key"
-            columnHeaders["isForeignKey"] = "Is Foreign Key"
-            columnHeaders["foreignKeyDescription"] = "Foreign Key Description"
-            TablesUtil.renderAttributeTable(columnHeaders, columnList)
+            val getAllTableColumns = GetAllTableColumns(table, connection.metaData)
+            val result = executeAction(getAllTableColumns)
+            renderResult(result)
         }
     }
 

@@ -2,10 +2,10 @@ package org.dbshell.shellmethods
 
 import org.dbshell.actions.ActionExecutor
 import org.dbshell.actions.connection.GetActiveConnectionInfo
+import org.dbshell.actions.db.GetAllCatalogs
+import org.dbshell.actions.db.GetAllSchemas
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
-import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.providers.DatabaseMdPrimitiveProvider
-import org.dbshell.ui.TablesUtil
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
@@ -15,11 +15,9 @@ import java.util.*
 class ConnectionMethods: ActionExecutor {
 
     private final val schemaHeaders = LinkedHashMap<String, Any>()
-    private final val catalogHeaders = LinkedHashMap<String, Any>()
 
     init {
         schemaHeaders["schema"] = "Schema"
-        catalogHeaders["catalog"] = "Catalog"
     }
 
     @ShellMethod("Get active connection information")
@@ -51,9 +49,9 @@ class ConnectionMethods: ActionExecutor {
     fun getAllSchemas() {
         try {
             ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-                val dbmd = connection.metaData
-                val entries = DatabaseMetadata.getSchemas(dbmd)
-                TablesUtil.renderAttributeTable(schemaHeaders, entries)
+                val getSchemas = GetAllSchemas(connection.metaData)
+                val result = executeAction(getSchemas)
+                renderResult(result)
             }
         } catch (ex: Exception) {
             println("Error getting current connection information: ${ex.message}")
@@ -64,9 +62,9 @@ class ConnectionMethods: ActionExecutor {
     fun getAllCatalogs() {
         try {
             ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-                val dbmd = connection.metaData
-                val entries = DatabaseMetadata.getCatalogs(dbmd)
-                TablesUtil.renderAttributeTable(catalogHeaders, entries)
+                val getCatalogs = GetAllCatalogs(connection.metaData)
+                val result = executeAction(getCatalogs)
+                renderResult(result)
             }
         } catch (ex: Exception) {
             println("Error getting current connection information: ${ex.message}")

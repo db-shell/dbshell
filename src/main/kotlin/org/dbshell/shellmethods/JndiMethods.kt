@@ -1,6 +1,8 @@
 package org.dbshell.shellmethods
 
 import org.bradfordmiller.simplejndiutils.JNDIUtils
+import org.dbshell.actions.ActionExecutor
+import org.dbshell.actions.jndi.GetEntries
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.ui.TablesUtil
@@ -13,7 +15,7 @@ import javax.naming.InitialContext
 import java.util.*
 
 @ShellComponent
-class JndiMethods {
+class JndiMethods: ActionExecutor {
 
     data class JndiEntries(val key: String, val value: String)
 
@@ -56,16 +58,9 @@ class JndiMethods {
     @ShellMethod("List database entries from a context")
     fun listEntries(@ShellOption(valueProvider = ContextValueProvider::class) context: String) {
         try {
-            val initCtx = InitialContext()
-            val mc = JNDIUtils.getMemoryContextFromInitContext(initCtx, context)
-            val entries = JNDIUtils.getEntriesForJndiContext(mc).map{kvp -> JndiEntries(kvp.key, kvp.value) }.toList()
-
-            val headers = LinkedHashMap<String, Any>()
-            headers["key"] = "Jndi Entry"
-            headers["value"] = "Value"
-
-            TablesUtil.renderAttributeTable(headers, entries)
-
+            val getEntries = GetEntries(context)
+            val result = executeAction(getEntries)
+            renderResult(result)
         } catch(e: Exception) {
             logger.error("Error when accessing entries for context $context: ${e.message}")
             throw e
