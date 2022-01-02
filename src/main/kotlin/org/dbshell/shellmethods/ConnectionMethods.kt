@@ -14,12 +14,6 @@ import java.util.*
 @ShellComponent
 class ConnectionMethods: ActionExecutor {
 
-    private final val schemaHeaders = LinkedHashMap<String, Any>()
-
-    init {
-        schemaHeaders["schema"] = "Schema"
-    }
-
     @ShellMethod("Get active connection information")
     fun getCurrentConnectionInfo(@ShellOption(defaultValue = "false") executeAsync: Boolean) {
         try {
