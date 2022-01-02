@@ -101,17 +101,17 @@ release {
     versionPropertyFile = "version.properties"
 }
 
-val log4jVersion = "2.17.0"
+val log4jVersion = "2.17.1"
 val springVersion = "2.0.1.RELEASE"
-val jacksonVersion = "2.13.0"
-val springBootVersion = "2.6.1"
+val jacksonVersion = "2.13.1"
+val springBootVersion = "2.6.2"
 
 dependencies {
 
     api("org.bradfordmiller", "simplejndiutils", "0.0.14") {
         isTransitive = true
     }
-    implementation("us.fatehi:schemacrawler:16.16.3")
+    implementation("us.fatehi:schemacrawler:16.16.6")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion)
     implementation("org.springframework.boot", "spring-boot-starter", springBootVersion)
     implementation("org.springframework.boot", "spring-boot-starter-test", springBootVersion)
@@ -124,7 +124,7 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.36.0.3")
     implementation("org.jooq", "jooq", "3.15.5")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
-    implementation("org.mybatis", "mybatis", "3.5.8")
+    implementation("org.mybatis", "mybatis", "3.5.9")
     implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.38")
     implementation("com.fasterxml.jackson.core", "jackson-core", jacksonVersion)
     implementation("com.fasterxml.jackson.core", "jackson-databind", jacksonVersion)
