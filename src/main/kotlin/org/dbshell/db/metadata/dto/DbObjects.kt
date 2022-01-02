@@ -1,8 +1,5 @@
 package org.dbshell.db.metadata.dto
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
-
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 data class Schema(val schemaName: String) {
     override fun toString(): String {
         return schemaName
