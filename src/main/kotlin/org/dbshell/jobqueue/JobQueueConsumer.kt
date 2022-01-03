@@ -14,7 +14,9 @@ class JobQueueConsumer : Runnable {
         val uuid = payload.id
         val action = payload.action
         val result = action.execute()
-        ResultQueueWrapper.put(uuid, result)
+        result?.let {r ->
+            ResultQueueWrapper.put(uuid, r)
+        }
     }
     override fun run() {
         val payload = JobQueueWrapper.get()

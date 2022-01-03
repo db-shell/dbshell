@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 data class PayLoad(val id: UUID, val action: Action)
-data class Result(val id: UUID, val result: ActionResult)
+data class Result(val id: UUID, val result: ActionResult?)
 
 class JobQueueWrapper {
     companion object {
@@ -55,7 +55,7 @@ class ResultQueueWrapper {
                 .registerModule(VavrModule())
                 .setDateFormat(df)
 
-        fun put(uuid: UUID, actionResult: ActionResult) {
+        fun put(uuid: UUID, actionResult: ActionResult?) {
             val result = Result(uuid, actionResult)
             val data = om.writeValueAsBytes(result)
             JobQueue.resultsQueue.enqueue(data)

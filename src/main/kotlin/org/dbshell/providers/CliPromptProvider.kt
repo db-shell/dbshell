@@ -12,18 +12,8 @@ class CliPromptProvider: PromptProvider {
         val contextAndJndi = EnvironmentVars.currentContextAndJndi
         val catalog = EnvironmentVars.currentCatalog
         val schema = EnvironmentVars.currentSchema
-
-        val currentContext =
-            if(contextAndJndi.context == null)
-                "context:Not Set"
-            else
-                "context:${contextAndJndi.context}"
-
-        val currentJndi =
-            if(contextAndJndi.context == null || contextAndJndi.jndi == null)
-                "jndi:Not Set"
-            else
-                "jndi:${contextAndJndi.jndi}"
+        val currentContext = "context:${contextAndJndi.context}"
+        val currentJndi = "jndi:${contextAndJndi.jndi}"
 
         val currentCatalog =
             if(catalog.isNullOrEmpty()) {

@@ -14,7 +14,9 @@ class ResultsQueueConsumer: Runnable {
     private fun processResult(result: Result) {
         val uuid = result.id
         val r = result.result
-        ResultsHashMap.resultsMap[uuid] = r
+        r?.let {res ->
+            ResultsHashMap.resultsMap[uuid] = res
+        }
     }
     override fun run() {
         val result = ResultQueueWrapper.get()

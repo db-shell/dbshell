@@ -8,7 +8,8 @@ import org.dbshell.jobqueue.JobQueueWrapper
 import org.dbshell.ui.TablesUtil
 import java.util.*
 
-typealias ActionResult = Either<List<ActionLog>, List<Map<String, Any?>>>
+data class GridResult(val headers: Set<String>, val data: List<List<Any?>>)
+typealias ActionResult = Either<List<ActionLog>, GridResult>
 
 data class ActionLog(val event: String, val date: Date = Date()) {
     override fun toString(): String {
@@ -18,7 +19,7 @@ data class ActionLog(val event: String, val date: Date = Date()) {
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 interface Action {
-    fun execute(): ActionResult
+    fun execute(): ActionResult?
 }
 
 interface ActionExecutor: ActionRenderer  {
@@ -54,9 +55,11 @@ interface ActionRenderer {
                 actionLog.forEach { println(it) }
             }
             is Either.Right -> {
-                val dataArray = result.get()
-                val data = dataArray.map { v -> v.values.toTypedArray()}.toTypedArray()
-                TablesUtil.renderAttributeTable(data)
+                val gridResult = result.get()
+                val headers: Array<Array<Any?>> = arrayOf(gridResult.headers.toTypedArray())
+                val data = gridResult.data.map {d -> d.toTypedArray()}.toTypedArray()
+                val formattedResult = headers.plus(data)
+                TablesUtil.renderAttributeTable(formattedResult)
             }
         }
     }
