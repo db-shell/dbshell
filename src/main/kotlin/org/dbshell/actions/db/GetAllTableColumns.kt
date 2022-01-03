@@ -41,7 +41,6 @@ data class GetAllTableColumns(val tableName: String, val entries: List<Column>):
                 )
             )
         }
-        val data = values.map { v -> v.values.toTypedArray()}.toTypedArray()
-        return Either.right(data)
+        return Either.right(values)
     }
 }

@@ -18,7 +18,6 @@ data class GetActiveConnectionInfo(val attribute: String? = null): Action {
         entries.forEach {entry ->
             values.add(mutableMapOf("Connection Property" to entry.key, "Value" to entry.value))
         }
-        val data = values.map { v -> v.values.toTypedArray()}.toTypedArray()
-        return Either.right(data)
+        return Either.right(values)
     }
 }

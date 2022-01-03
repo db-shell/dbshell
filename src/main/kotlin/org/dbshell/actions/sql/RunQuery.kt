@@ -30,7 +30,6 @@ data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {
                 println(e.message)
             }
         }
-        val data = values.map { v -> v.values.toTypedArray()}.toTypedArray()
-        return Either.right(data)
+        return Either.right(values)
     }
 }

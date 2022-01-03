@@ -11,7 +11,6 @@ data class GetAllTables(val entries: List<Table>): Action {
         entries.forEach {entry ->
             values.add(mutableMapOf("Table Name" to entry.tableName, "Table Type" to entry.tableType))
         }
-        val data = values.map { v -> v.values.toTypedArray()}.toTypedArray()
-        return Either.right(data)
+        return Either.right(values)
     }
 }
