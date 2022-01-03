@@ -77,9 +77,9 @@ class Driver {
             logger.info("Closing results queue...")
             try {
                 JobQueue.resultsQueue.close()
-                logger.info("Job queue successfully closed.")
+                logger.info("Result queue successfully closed.")
             } catch(iox: IOException) {
-                logger.error("Error occurred closing the job queue: ${iox.message}")
+                logger.error("Error occurred closing the result queue: ${iox.message}")
             }
             logger.info("Stopping application...")
             try {

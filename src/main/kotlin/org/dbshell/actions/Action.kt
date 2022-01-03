@@ -8,7 +8,7 @@ import org.dbshell.jobqueue.JobQueueWrapper
 import org.dbshell.ui.TablesUtil
 import java.util.*
 
-data class GridResult(val headers: Set<String>, val data: List<List<Any?>>)
+data class GridResult(val headers: LinkedHashSet<String>, val data: List<List<Any?>>)
 typealias ActionResult = Either<List<ActionLog>, GridResult>
 
 data class ActionLog(val event: String, val date: Date = Date()) {
@@ -20,6 +20,21 @@ data class ActionLog(val event: String, val date: Date = Date()) {
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 interface Action {
     fun execute(): ActionResult?
+}
+
+abstract class UIAction: Action {
+    private val sortedHeaders = LinkedHashSet<String>()
+    abstract val headers: Set<String>
+
+    private fun loadHeaders() {
+        headers.forEach {h ->
+            sortedHeaders.add(h)
+        }
+    }
+    fun getGridResult(data: List<List<Any?>>): GridResult {
+        loadHeaders()
+        return GridResult(sortedHeaders, data)
+    }
 }
 
 interface ActionExecutor: ActionRenderer  {
