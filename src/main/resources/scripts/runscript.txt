@@ -2,3 +2,6 @@ export JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=
 
 run-query --execute-async --row-limit 50 --sql "SELECT * FROM weed_scrape.dispensary"
 export-query-to-csv --sql "SELECT * FROM weed_scrape.dispensary" --output-file /tmp/csvtest.csv
+run-sql-script --script-file
+
+INSERT INTO weed_scrape.dispensary VALUES('39b5d250-a389-43d0-9f01-472cc3611195', 'BRAD AGAIN!');
