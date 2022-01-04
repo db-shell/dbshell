@@ -5,9 +5,9 @@ import org.dbshell.environment.EnvironmentProps
 
 class JobQueue {
     companion object {
-        val jobQueueInfo = EnvironmentProps.getJobQueueInfo()
+        private val jobQueueInfo = EnvironmentProps.getJobQueueInfo()
+        private val resultsQueueInfo = EnvironmentProps.getResultsQueueInfo()
         val jobQueue = BigQueueImpl(jobQueueInfo.path, jobQueueInfo.name)
-        val resultsQueueInfo = EnvironmentProps.getResultsQueueInfo()
         val resultsQueue = BigQueueImpl(resultsQueueInfo.path, resultsQueueInfo.name)
     }
 }

@@ -29,12 +29,16 @@ class JobQueueWrapper {
             return uuid
         }
 
-        fun get(): PayLoad? {
+        @Synchronized fun get(): PayLoad? {
             val check = JobQueue.jobQueue.peek()
             val payload =
             if(check != null) {
                 val data = JobQueue.jobQueue.dequeue()
-                om.readValue(data, PayLoad::class.java)!!
+                if(data != null) {
+                    om.readValue(data, PayLoad::class.java)!!
+                } else {
+                    null
+                }
             } else {
                 null
             }
@@ -61,12 +65,16 @@ class ResultQueueWrapper {
             JobQueue.resultsQueue.enqueue(data)
         }
 
-        fun get(): Result? {
+        @Synchronized fun get(): Result? {
             val check = JobQueue.resultsQueue.peek()
             val result =
                 if(check != null) {
                     val data = JobQueue.resultsQueue.dequeue()
-                    om.readValue(data, Result::class.java)!!
+                    if(data != null) {
+                        om.readValue(data, Result::class.java)!!
+                    } else {
+                        null
+                    }
                 } else {
                     null
                 }
