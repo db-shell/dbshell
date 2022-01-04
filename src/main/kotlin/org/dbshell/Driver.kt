@@ -2,9 +2,7 @@ package org.dbshell
 
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
-import org.dbshell.jobqueue.JobQueue
-import org.dbshell.jobqueue.JobQueueConsumer
-import org.dbshell.jobqueue.ResultsQueueConsumer
+import org.dbshell.jobqueue.*
 import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.SpringApplication
@@ -40,8 +38,8 @@ class Driver {
         EnvironmentVars.currentSchema = schema
 
         //Start listening thread for job queue
-        executorService.scheduleWithFixedDelay(JobQueueConsumer(), 1,  1, TimeUnit.SECONDS)
-        executorService.scheduleWithFixedDelay(ResultsQueueConsumer(), 1,  1, TimeUnit.SECONDS)
+        executorService.scheduleWithFixedDelay(JobQueueConsumer { JobQueueWrapper.get() }, 1,  1, TimeUnit.SECONDS)
+        executorService.scheduleWithFixedDelay(ResultsQueueConsumer { ResultQueueWrapper.get() }, 1,  1, TimeUnit.SECONDS)
     }
 
     companion object {

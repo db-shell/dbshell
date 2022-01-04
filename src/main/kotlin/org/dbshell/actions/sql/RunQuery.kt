@@ -9,12 +9,12 @@ import org.dbshell.actions.UIAction
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 
 data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {
-    override fun execute(): ActionResult? {
+    override fun execute(): ActionResult {
         var rowCount = 0L
         val lhs = LinkedHashSet<String>()
+        val values: MutableList<Map<String, Any?>> = mutableListOf()
         try {
             ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-                val values: MutableList<Map<String, Any?>> = mutableListOf()
                 val qi = SqlUtils.getQueryInfo(sql, connection)
                 val columns = SqlUtils.getColumnsFromRs(qi)
                 columns.values.forEach {c -> lhs.add(c)}
@@ -26,13 +26,12 @@ data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {
                         }
                     }
                 }
-                val entries = values.map { v -> v.values.toList() }
-                val gridResult = GridResult(lhs, entries)
-                return Either.right(gridResult)
             }
         } catch (e: Exception) {
             println(e.message)
-            return null
         }
+        val entries = values.map { v -> v.values.toList() }
+        val gridResult = GridResult(lhs, entries)
+        return Either.right(gridResult)
     }
 }

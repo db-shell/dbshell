@@ -19,7 +19,7 @@ data class ActionLog(val event: String, val date: Date = Date()) {
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 interface Action {
-    fun execute(): ActionResult?
+    fun execute(): ActionResult
 }
 
 abstract class UIAction: Action {
