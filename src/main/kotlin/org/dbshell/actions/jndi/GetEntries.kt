@@ -10,8 +10,8 @@ import org.dbshell.shellmethods.JndiMethods
 import javax.naming.InitialContext
 
 data class GetEntries(val context: String): UIAction() {
-    override val headers: Set<String>
-        get() = setOf("Jndi Entry", "Value")
+    override val headers: MutableSet<String>
+        get() = mutableSetOf("Jndi Entry", "Value")
 
     override fun execute(): ActionResult {
         val initCtx = InitialContext()

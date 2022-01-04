@@ -1,7 +1,6 @@
 package org.dbshell.jobqueue
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.vavr.jackson.datatype.VavrModule
 import org.dbshell.actions.Action

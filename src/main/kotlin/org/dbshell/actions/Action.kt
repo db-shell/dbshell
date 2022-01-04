@@ -1,9 +1,11 @@
 package org.dbshell.actions
 
+import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import io.vavr.API.Left
 import io.vavr.API.Right
 import io.vavr.control.Either
+import org.dbshell.actions.db.GetAllSchemas
 import org.dbshell.jobqueue.JobQueueWrapper
 import org.dbshell.ui.TablesUtil
 import java.util.*
@@ -24,7 +26,7 @@ interface Action {
 
 abstract class UIAction: Action {
     private val sortedHeaders = LinkedHashSet<String>()
-    abstract val headers: Set<String>
+    abstract val headers: MutableSet<String>
 
     private fun loadHeaders() {
         headers.forEach {h ->

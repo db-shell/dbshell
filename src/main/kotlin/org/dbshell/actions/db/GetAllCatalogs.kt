@@ -8,8 +8,8 @@ import org.dbshell.actions.UIAction
 import org.dbshell.db.metadata.dto.Catalog
 
 data class GetAllCatalogs(val entries: List<Catalog>): UIAction() {
-    override val headers: Set<String>
-        get() = setOf("Catalog")
+    override val headers: MutableSet<String>
+        get() = mutableSetOf("Catalog")
 
     override fun execute(): ActionResult {
         val result = entries.map {e -> listOf(e.toString())}

@@ -7,8 +7,8 @@ import org.dbshell.db.metadata.DatabasePrimitives
 
 //TODO: Make attribute string a list of strings
 data class GetActiveConnectionInfo(val attribute: String? = null): UIAction() {
-    override val headers: Set<String>
-        get() = setOf("Connection Property", "Value")
+    override val headers: MutableSet<String>
+        get() = mutableSetOf("Connection Property", "Value")
 
     override fun execute(): ActionResult {
         var entries = DatabasePrimitives.getFormattedPrimitivesFromDbMetadata()
