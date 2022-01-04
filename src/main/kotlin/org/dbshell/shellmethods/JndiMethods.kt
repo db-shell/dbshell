@@ -5,7 +5,6 @@ import org.dbshell.actions.ActionExecutor
 import org.dbshell.actions.jndi.GetEntries
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
-import org.dbshell.ui.TablesUtil
 import org.dbshell.providers.ContextValueProvider
 import org.dbshell.providers.JndiValueProvider
 import org.slf4j.LoggerFactory

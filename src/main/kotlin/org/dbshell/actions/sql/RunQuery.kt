@@ -5,7 +5,6 @@ import org.bradfordmiller.sqlutils.SqlUtils
 import org.dbshell.actions.Action
 import org.dbshell.actions.ActionResult
 import org.dbshell.actions.GridResult
-import org.dbshell.actions.UIAction
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 
 data class RunQuery(val sql: String, val rowLimit: Long =  50): Action {

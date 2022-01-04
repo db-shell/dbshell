@@ -10,7 +10,6 @@ import org.dbshell.providers.DatabaseMdPrimitiveProvider
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
-import java.util.*
 
 @ShellComponent
 class ConnectionMethods: ActionExecutor {

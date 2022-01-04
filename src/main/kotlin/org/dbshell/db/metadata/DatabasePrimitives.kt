@@ -1,6 +1,5 @@
 package org.dbshell.db.metadata
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import org.dbshell.reflection.utils.DatabaseMetadataUtil
 import org.dbshell.shellmethods.ConnectionMethods
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil

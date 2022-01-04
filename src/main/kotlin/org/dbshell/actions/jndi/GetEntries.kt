@@ -2,9 +2,7 @@ package org.dbshell.actions.jndi
 
 import io.vavr.control.Either
 import org.bradfordmiller.simplejndiutils.JNDIUtils
-import org.dbshell.actions.Action
 import org.dbshell.actions.ActionResult
-import org.dbshell.actions.GridResult
 import org.dbshell.actions.UIAction
 import org.dbshell.shellmethods.JndiMethods
 import javax.naming.InitialContext

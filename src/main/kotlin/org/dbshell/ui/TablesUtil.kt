@@ -1,7 +1,6 @@
 package org.dbshell.ui
 
 import org.springframework.shell.table.*
-import java.util.*
 
 class TablesUtil {
     companion object {

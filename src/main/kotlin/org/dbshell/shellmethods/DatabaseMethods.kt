@@ -9,7 +9,6 @@ import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.providers.CatalogValueProvider
-import org.dbshell.ui.TablesUtil
 import org.dbshell.providers.SchemaValueProvider
 import org.dbshell.providers.TableProvider
 
@@ -25,7 +24,6 @@ import org.springframework.shell.standard.ShellOption
 
 import java.io.File
 import java.nio.file.Files
-import java.util.*
 import org.dbshell.utils.ScriptRunner
 
 @ShellComponent

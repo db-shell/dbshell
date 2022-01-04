@@ -1,6 +1,5 @@
 package org.dbshell.shellmethods
 
-import org.dbshell.Driver
 import org.dbshell.jobqueue.JobQueue
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.ShellComponent
