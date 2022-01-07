@@ -1,10 +1,7 @@
 package org.dbshell.shellmethods
 
-import org.apache.commons.io.FileUtils
 import org.dbshell.actions.ActionExecutor
-import org.dbshell.actions.db.GetAllTableColumns
-import org.dbshell.actions.db.GetAllTables
-import org.dbshell.actions.db.GetDDLForTable
+import org.dbshell.actions.db.*
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.environment.EnvironmentProps
@@ -24,8 +21,6 @@ import org.springframework.shell.standard.ShellMethodAvailability
 import org.springframework.shell.standard.ShellOption
 
 import java.io.File
-import java.nio.file.Files
-import org.dbshell.utils.ScriptRunner
 
 @ShellComponent
 class DatabaseMethods: ActionExecutor {
@@ -102,7 +97,8 @@ class DatabaseMethods: ActionExecutor {
 
             val currentCatalog = EnvironmentVars.currentCatalog
             val currentSchema = EnvironmentVars.currentSchema
-            val entries = DatabaseMetadata.getTables(connection.metaData, currentCatalog!!, currentSchema!!, types.toTypedArray())
+            val entries =
+                DatabaseMetadata.getTables(connection.metaData, currentCatalog!!, currentSchema!!, types.toTypedArray())
             entries.sortBy {t -> t.tableName}
             val getTables = GetAllTables(entries)
             val result = executeAction(getTables, executeAsync)
@@ -141,25 +137,21 @@ class DatabaseMethods: ActionExecutor {
     }
 
     @ShellMethod("Generate DDL for database")
-    fun getDdlForDatabase(scriptFile: File) {
-        println("Generating ddl for current database connection...")
+    fun getDdlForDatabase(scriptFile: File, @ShellOption(defaultValue = "false") executeAsync: Boolean) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val dslContext = DSL.using(connection, Settings().withRenderFormatted(true))
             val ddl = dslContext.ddl(dslContext.meta().tables)
-            ddl.queries().forEach {q ->
-                FileUtils.writeStringToFile(scriptFile, q.sql, "ISO-8859-1", true)
-            }
+            val entries = ddl.queries().map{q -> q.sql}.toList()
+            val getDDLForDb = GetDDLForDb(scriptFile, entries)
+            val result = executeAction(getDDLForDb, executeAsync)
+            renderResult(result)
         }
-        println("Generating ddl complete. Please see file ${scriptFile.absolutePath}.")
     }
 
     @ShellMethod("Run SQL script")
     fun runSqlScript(scriptFile: File, @ShellOption(defaultValue = "false") executeAsync: Boolean) {
-        println("Executing script ${scriptFile.absolutePath}...")
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            val content = String(Files.readAllBytes(scriptFile.toPath()))
-            ScriptRunner.executeScript(content, connection)
-        }
-        println("Execution of script complete.")
+        val runSqlScript = RunSqlScript(scriptFile)
+        val result = executeAction( runSqlScript, executeAsync)
+        renderResult(result)
     }
 }
