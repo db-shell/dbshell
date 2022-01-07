@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils
 import org.dbshell.actions.ActionExecutor
 import org.dbshell.actions.db.GetAllTableColumns
 import org.dbshell.actions.db.GetAllTables
+import org.dbshell.actions.db.GetDDLForTable
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
 import org.dbshell.environment.EnvironmentProps
@@ -36,7 +37,7 @@ class DatabaseMethods: ActionExecutor {
     fun getCatalogAvailability(): Availability {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val dbmd = connection.metaData
-            if(DatabaseMetadata.getCatalogs(dbmd).size > 0) {
+            if(DatabaseMetadata.getCatalogs(dbmd).isNotEmpty()) {
                 return Availability.available()
             } else {
                 return Availability.unavailable("This database connection does not contain any catalogs.")
@@ -47,7 +48,7 @@ class DatabaseMethods: ActionExecutor {
     fun getSchemaAvailability(): Availability {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val dbmd = connection.metaData
-            if(DatabaseMetadata.getSchemas(dbmd).size > 0) {
+            if(DatabaseMetadata.getSchemas(dbmd).isNotEmpty()) {
                 return Availability.available()
             } else {
                 return Availability.unavailable("This database connection does not contain any schemas.")
@@ -58,7 +59,8 @@ class DatabaseMethods: ActionExecutor {
     @ShellMethod("Sets the active Schema for a context and jndi if the driver supports this")
     @ShellMethodAvailability("getCatalogAvailability")
     fun setCurrentCatalog(
-        @ShellOption(valueProvider = CatalogValueProvider::class) catalog: String
+        @ShellOption(valueProvider = CatalogValueProvider::class) catalog: String,
+        @ShellOption(defaultValue = "false") executeAsync: Boolean
         ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             connection.catalog = catalog
@@ -125,12 +127,16 @@ class DatabaseMethods: ActionExecutor {
 
     @ShellMethod("Generate DDL for table")
     fun getDdlForTable(
-        @ShellOption(valueProvider = TableProvider::class) table: String
+        @ShellOption(valueProvider = TableProvider::class) table: String,
+        @ShellOption(defaultValue = "false") executeAsync: Boolean
     ) {
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val dslContext = DSL.using(connection, Settings().withRenderFormatted(true))
             val ddl = dslContext.ddl(dslContext.meta().getTables(table))
-            ddl.queries().forEach {q -> println(q.sql)}
+            val entries = ddl.queries().map{q -> q.sql}.toList()
+            val getDDLForTable = GetDDLForTable(entries)
+            val result = executeAction(getDDLForTable, executeAsync)
+            renderResult(result)
         }
     }
 
@@ -147,8 +153,8 @@ class DatabaseMethods: ActionExecutor {
         println("Generating ddl complete. Please see file ${scriptFile.absolutePath}.")
     }
 
-    @ShellMethod("Run sql script")
-    fun runSqlScript(scriptFile: File) {
+    @ShellMethod("Run SQL script")
+    fun runSqlScript(scriptFile: File, @ShellOption(defaultValue = "false") executeAsync: Boolean) {
         println("Executing script ${scriptFile.absolutePath}...")
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
             val content = String(Files.readAllBytes(scriptFile.toPath()))
