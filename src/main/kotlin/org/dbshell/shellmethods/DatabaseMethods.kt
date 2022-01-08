@@ -4,7 +4,6 @@ import org.dbshell.actions.ActionExecutor
 import org.dbshell.actions.db.*
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.dbshell.db.metadata.DatabaseMetadata
-import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.providers.CatalogValueProvider
 import org.dbshell.providers.SchemaValueProvider
@@ -54,14 +53,11 @@ class DatabaseMethods: ActionExecutor {
     @ShellMethod("Sets the active Schema for a context and jndi if the driver supports this")
     @ShellMethodAvailability("getCatalogAvailability")
     fun setCurrentCatalog(
-        @ShellOption(valueProvider = CatalogValueProvider::class) catalog: String,
-        @ShellOption(defaultValue = "false") executeAsync: Boolean
+        @ShellOption(valueProvider = CatalogValueProvider::class) catalog: String
         ) {
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            connection.catalog = catalog
-            EnvironmentVars.currentCatalog = catalog
-            EnvironmentProps.setCurrentCatalog(catalog)
-        }
+        val setCurrentCatalog = SetCurrentCatalog(catalog)
+        val result = executeAction(setCurrentCatalog)
+        renderResult(result)
     }
 
     @ShellMethod("Sets the active schema for a context and jndi if the driver supports this")
@@ -69,11 +65,9 @@ class DatabaseMethods: ActionExecutor {
     fun setCurrentSchema(
         @ShellOption(valueProvider = SchemaValueProvider::class) schema: String
         ) {
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { connection ->
-            connection.schema = schema
-            EnvironmentVars.currentSchema = schema
-            EnvironmentProps.setCurrentSchema(schema)
-        }
+        val setCurrentSchema = SetCurrentSchema(schema)
+        val result = executeAction(setCurrentSchema)
+        renderResult(result)
     }
 
     @ShellMethod("List all tables for the active connection and catalog")

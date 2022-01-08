@@ -6,7 +6,9 @@ import org.springframework.core.MethodParameter
 import org.springframework.shell.CompletionContext
 import org.springframework.shell.CompletionProposal
 import org.springframework.shell.standard.ValueProviderSupport
+import org.springframework.stereotype.Component
 
+@Component
 class SchemaValueProvider: ValueProviderSupport() {
     override fun complete(
         parameter: MethodParameter?,
@@ -15,12 +17,12 @@ class SchemaValueProvider: ValueProviderSupport() {
     ): MutableList<CompletionProposal> {
 
         val currentInput = completionContext?.currentWord()
-        val dbmd = ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.metaData
-
-        return DatabaseMetadata.getSchemas(dbmd)
-                 .map{s -> s.schemaName}
-                 .filter{s -> s.contains(currentInput.toString())}
-                 .map{cp -> CompletionProposal(cp)}
-                 .toMutableList()
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {conn ->
+            return DatabaseMetadata.getSchemas(conn.metaData)
+                .map { s -> s.schemaName }
+                .filter { s -> s.contains(currentInput.toString()) }
+                .map { cp -> CompletionProposal(cp) }
+                .toMutableList()
+        }
     }
 }
