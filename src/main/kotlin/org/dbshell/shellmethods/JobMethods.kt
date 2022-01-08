@@ -9,6 +9,7 @@ import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.ShellOption
 import java.util.*
 
+//TODO: Add methods for describing a job and removing a job from cache
 @ShellComponent
 class JobMethods: ActionRenderer {
     companion object {

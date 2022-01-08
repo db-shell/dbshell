@@ -6,6 +6,7 @@ import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import java.io.IOException
 
+//TODO:  Allow queues to be cleaned individually in addition to doing both at once
 @ShellComponent
 class QueueMethods {
     companion object {
