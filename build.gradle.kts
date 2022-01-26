@@ -104,14 +104,14 @@ release {
 val log4jVersion = "2.17.1"
 val springVersion = "2.0.1.RELEASE"
 val jacksonVersion = "2.13.1"
-val springBootVersion = "2.6.2"
+val springBootVersion = "2.6.3"
 
 dependencies {
 
     api("org.bradfordmiller", "simplejndiutils", "0.0.14") {
         isTransitive = true
     }
-    implementation("us.fatehi:schemacrawler:16.16.6")
+    implementation("us.fatehi:schemacrawler:16.16.10")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion)
     implementation("org.springframework.boot", "spring-boot-starter", springBootVersion)
     implementation("org.springframework.boot", "spring-boot-starter-test", springBootVersion)
@@ -122,7 +122,7 @@ dependencies {
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
     implementation("org.postgresql", "postgresql", "42.3.1")
     implementation("org.xerial:sqlite-jdbc:3.36.0.3")
-    implementation("org.jooq", "jooq", "3.16.0")
+    implementation("org.jooq", "jooq", "3.16.3")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
     implementation("org.mybatis", "mybatis", "3.5.9")
     implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.38")
