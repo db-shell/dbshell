@@ -7,7 +7,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.6.10"
     // Apply the application plugin to add support for building a CLI application.
     id("java-library")
-    id ("com.github.johnrengelman.shadow").version( "7.1.0")
+    id ("com.github.johnrengelman.shadow").version( "7.1.2")
     id ("distribution")
     id("net.researchgate.release").version("2.8.1")
     application
@@ -101,17 +101,17 @@ release {
     versionPropertyFile = "version.properties"
 }
 
-val log4jVersion = "2.17.1"
+val log4jVersion = "2.17.2"
 val springVersion = "2.0.1.RELEASE"
 val jacksonVersion = "2.13.1"
-val springBootVersion = "2.6.3"
+val springBootVersion = "2.6.4"
 
 dependencies {
 
     api("org.bradfordmiller", "simplejndiutils", "0.0.14") {
         isTransitive = true
     }
-    implementation("us.fatehi:schemacrawler:16.16.10")
+    implementation("us.fatehi:schemacrawler:16.16.11")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion)
     implementation("org.springframework.boot", "spring-boot-starter", springBootVersion)
     implementation("org.springframework.boot", "spring-boot-starter-test", springBootVersion)
@@ -120,19 +120,19 @@ dependencies {
     implementation("org.apache.logging.log4j",  "log4j-core",  log4jVersion)
     implementation("org.apache.logging.log4j",  "log4j-api",  log4jVersion)
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
-    implementation("org.postgresql", "postgresql", "42.3.1")
+    implementation("org.postgresql", "postgresql", "42.3.3")
     implementation("org.xerial:sqlite-jdbc:3.36.0.3")
-    implementation("org.jooq", "jooq", "3.16.3")
+    implementation("org.jooq", "jooq", "3.16.4")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
     implementation("org.mybatis", "mybatis", "3.5.9")
     implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.38")
     implementation("com.fasterxml.jackson.core", "jackson-core", jacksonVersion)
     implementation("com.fasterxml.jackson.core", "jackson-databind", jacksonVersion)
-    implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
+    implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", "2.13.1")
     implementation("com.leansoft", "bigqueue", "0.7.0")
     implementation("io.vavr", "vavr-jackson", "0.10.3")
     implementation("io.vavr", "vavr", "0.10.4")
-    implementation("com.opencsv:opencsv:5.5.2")
+    implementation("com.opencsv:opencsv:5.6")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.6.10")
