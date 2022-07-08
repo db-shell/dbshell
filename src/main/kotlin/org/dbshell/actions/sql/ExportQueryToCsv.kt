@@ -2,6 +2,7 @@ package org.dbshell.actions.sql
 
 import com.opencsv.CSVWriter
 import io.vavr.control.Either
+import org.apache.spark.sql.SparkSession
 import org.dbshell.actions.Action
 import org.dbshell.actions.ActionLog
 import org.dbshell.actions.ActionResult
@@ -24,7 +25,18 @@ data class ExportQueryToCsv(
         actionList.add(
             ActionLog("Executing query '$sql' and exporting results to output file ${outputFile.absolutePath}...")
         )
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { conn ->
+        val spark =
+            SparkSession
+                .builder()
+                .appName("db-shell - query to file")
+                .orCreate
+
+        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {conn ->
+
+        }
+
+
+        /*ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { conn ->
             conn.createStatement().use {stmt ->
                 stmt?.executeQuery(sql).use { rs ->
                     PrintWriter(outputFile).use { pw ->
@@ -35,7 +47,7 @@ data class ExportQueryToCsv(
                     }
                 }
             }
-        }
+        }*/
         actionList.add(ActionLog("Export complete."))
         return Either.left(actionList)
     }

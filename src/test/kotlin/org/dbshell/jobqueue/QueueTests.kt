@@ -5,10 +5,17 @@ import org.dbshell.environment.EnvironmentVars
 import org.junit.Test
 import org.junit.jupiter.api.TestInstance
 import java.io.File
+import java.math.BigInteger
 import java.util.*
 import javax.naming.Context
+import kotlin.math.log
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+class ListNode(var `val`: Int) {
+    var next: ListNode? = null
+}
+
 class QueueTests {
 
     init {
