@@ -1,4 +1,4 @@
-package org.dbshell
+/*package org.dbshell
 
 import org.springframework.shell.CommandRegistry
 import org.springframework.shell.MethodTarget
@@ -25,3 +25,4 @@ open class BaseCommandTest {
         return shell.listCommands()[command]
     }
 }
+*/

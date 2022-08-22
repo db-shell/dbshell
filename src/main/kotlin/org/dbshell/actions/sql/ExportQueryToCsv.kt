@@ -6,9 +6,11 @@ import org.apache.spark.sql.SparkSession
 import org.dbshell.actions.Action
 import org.dbshell.actions.ActionLog
 import org.dbshell.actions.ActionResult
+import org.dbshell.reflection.utils.DatabaseMetadataUtil
 import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import java.io.File
 import java.io.PrintWriter
+import java.util.*
 
 data class ExportQueryToCsv(
     val sql: String,
@@ -28,26 +30,26 @@ data class ExportQueryToCsv(
         val spark =
             SparkSession
                 .builder()
+                .master("local[2]")
                 .appName("db-shell - query to file")
                 .orCreate
 
-        ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {conn ->
+        val credentials = ConnectionInfoUtil.getCredentialsFromCurrentConnection()
 
-        }
+        val connectionProperties = Properties()
+        connectionProperties["user"] = credentials.username
+        connectionProperties["password"] = credentials.password
 
+        val readDf = spark.read().jdbc(credentials.url, sql, connectionProperties)
+        readDf
+            .write()
+            .option("header", includeHeaders)
+            .option("delimiter", separator)
+            .option("quote", quoteChar)
+            .option("escape", escapeChar)
+            .option("lineSep", lineEndChar)
+            .csv(outputFile.path)
 
-        /*ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use { conn ->
-            conn.createStatement().use {stmt ->
-                stmt?.executeQuery(sql).use { rs ->
-                    PrintWriter(outputFile).use { pw ->
-                        val csvWriter =
-                            CSVWriter(pw, separator.first(), quoteChar.first(), escapeChar.first(), lineEndChar)
-
-                        csvWriter.writeAll(rs, includeHeaders)
-                    }
-                }
-            }
-        }*/
         actionList.add(ActionLog("Export complete."))
         return Either.left(actionList)
     }

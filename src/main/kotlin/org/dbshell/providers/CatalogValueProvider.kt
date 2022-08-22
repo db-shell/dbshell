@@ -5,15 +5,13 @@ import org.dbshell.db.metadata.DatabaseMetadata
 import org.springframework.core.MethodParameter
 import org.springframework.shell.CompletionContext
 import org.springframework.shell.CompletionProposal
-import org.springframework.shell.standard.ValueProviderSupport
+import org.springframework.shell.standard.ValueProvider
 import org.springframework.stereotype.Component
 
 @Component
-class CatalogValueProvider: ValueProviderSupport() {
+class CatalogValueProvider: ValueProvider {
     override fun complete(
-        parameter: MethodParameter?,
-        completionContext: CompletionContext?,
-        hints: Array<out String>?
+        completionContext: CompletionContext?
     ): MutableList<CompletionProposal> {
 
         val currentInput = completionContext?.currentWord()

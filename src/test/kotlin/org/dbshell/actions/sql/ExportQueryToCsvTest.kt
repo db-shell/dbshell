@@ -1,24 +1,31 @@
 package org.dbshell.actions.sql
 
-import org.dbshell.BaseCommandTest
-import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.shellmethods.SqlMethods
+import org.jline.console.CommandRegistry
 import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
 import org.junit.runner.RunWith
+import org.mockito.InjectMocks
+import org.mockito.Mock
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.shell.ConfigurableCommandRegistry
+import org.springframework.core.convert.ConversionService
+import org.springframework.core.convert.support.DefaultConversionService
+import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver
+import org.springframework.shell.InputProvider
 import org.springframework.shell.Shell
-import org.springframework.shell.jline.InteractiveShellApplicationRunner
+import org.springframework.shell.command.ArgumentHeaderMethodArgumentResolver
+import org.springframework.shell.command.CommandContextMethodArgumentResolver
+import org.springframework.shell.command.CommandExecution
+import org.springframework.shell.command.CommandRegistration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
+import org.springframework.util.ReflectionUtils.findMethod
 import java.io.File
 import javax.naming.Context
-import org.springframework.util.ReflectionUtils.findMethod
+
 
 @RunWith(SpringJUnit4ClassRunner::class)
-@SpringBootTest(properties = [InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=" + false ])
-class ExportQueryToCsvTest: BaseCommandTest() {
+class ExportQueryToCsvTest {
 
     init {
         if (!File("conf/jndi.properties").isFile) {
@@ -37,45 +44,59 @@ class ExportQueryToCsvTest: BaseCommandTest() {
 
     private val COMMAND_CLASS_UNDER_TEST: Class<SqlMethods> = SqlMethods::class.java
 
-    @Autowired
-    private val shell: Shell? = null
+    private var execution: CommandExecution? = null
+
+    @BeforeEach
+    fun setupCommandExecutionTests() {
+        val conversionService: ConversionService = DefaultConversionService()
+        val resolvers: MutableList<HandlerMethodArgumentResolver> = ArrayList<HandlerMethodArgumentResolver>()
+        resolvers.add(ArgumentHeaderMethodArgumentResolver(conversionService, null))
+        resolvers.add(CommandContextMethodArgumentResolver())
+        execution = CommandExecution.of(resolvers, null, null, conversionService)
+    }
+
+    @Mock
+    private lateinit var inputProvider: InputProvider
+
+    @Mock
+    private lateinit var commandRegistry: CommandRegistry
+
+    @InjectMocks
+    private lateinit var shell: Shell
+
 
     @Test
     fun testExportTooCsv() {
-        val command = "export-query-to-csv"
-        val commandMethod = "exportQueryToCsv"
 
-        val commandTarget = lookupCommand(shell!!, command)
-        val group = commandTarget?.group
-        val help = commandTarget?.help
-        val commandMethodRunTime = commandTarget?.method
-        val isAvailable = commandTarget?.availability?.isAvailable
+        val connCmd = "set-active-connection"
+        val cmdActiveConn =
+            CommandRegistration.builder()
+                .command(connCmd)
+                .withTarget()
+                    .method(this, connCmd)
+                    .and()
+                .build()
 
-        shell.evaluate{"set-active-connection --context default_ds --jndi SqliteChinook"}
-        val sql = "SELECT\t*\tFROM\talbums"
-        val result = shell.evaluate { "$command --sql $sql --output-file src/test/resources/data/outputData/csvtest.csv" }
+        val context = "default_ds"
+        val jndi = "SqliteChinook"
+
+        val commandSql = "export-query-to-csv"
+        val cmdSql =
+            CommandRegistration.builder()
+                .command(commandSql)
+                .withTarget()
+                    .method(this, commandSql)
+                    .and()
+                .build()
+
+        val connResult = execution?.evaluate(cmdActiveConn, arrayOf("--context", context, "--jndi", jndi))
+        println(connResult)
+
+        val sql = "SELECT * FROM albums"
+        val file = "src/test/resources/data/outputData/csvtest.csv"
+
+        val result = execution?.evaluate(cmdSql, arrayOf("--sql", sql, "--output-file", file))
         println(result)
 
-        assert(commandTarget != null)
-        assert(group == "Sql Methods")
-        assert(help == "Export SQL query to csv")
-        assert(commandMethodRunTime!! ==
-                findMethod(
-                    COMMAND_CLASS_UNDER_TEST,
-                    commandMethod,
-                    String::class.java,
-                    File::class.java,
-                    String::class.java,
-                    String::class.java,
-                    String::class.java,
-                    String::class.java,
-                    Boolean::class.java,
-                    Boolean::class.java
-                )
-        )
-        assert(isAvailable == true)
-
-
     }
-
 }

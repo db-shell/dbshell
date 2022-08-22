@@ -14,10 +14,7 @@ import org.jooq.impl.DSL
 import org.slf4j.LoggerFactory
 
 import org.springframework.shell.Availability
-import org.springframework.shell.standard.ShellComponent
-import org.springframework.shell.standard.ShellMethod
-import org.springframework.shell.standard.ShellMethodAvailability
-import org.springframework.shell.standard.ShellOption
+import org.springframework.shell.standard.*
 
 import java.io.File
 

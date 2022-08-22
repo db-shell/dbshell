@@ -5,18 +5,16 @@ import org.dbshell.db.metadata.DatabaseMetadata
 import org.springframework.core.MethodParameter
 import org.springframework.shell.CompletionContext
 import org.springframework.shell.CompletionProposal
-import org.springframework.shell.standard.ValueProviderSupport
+import org.springframework.shell.standard.ValueProvider
 import org.springframework.stereotype.Component
 
 @Component
-class SchemaValueProvider: ValueProviderSupport() {
+class SchemaValueProvider: ValueProvider {
     override fun complete(
-        parameter: MethodParameter?,
-        completionContext: CompletionContext?,
-        hints: Array<out String>?
+        completionContext: CompletionContext
     ): MutableList<CompletionProposal> {
 
-        val currentInput = completionContext?.currentWord()
+        val currentInput = completionContext.currentWord()
         ConnectionInfoUtil.getConnectionFromCurrentContextJndi().connection.use {conn ->
             return DatabaseMetadata.getSchemas(conn.metaData)
                 .map { s -> s.schemaName }

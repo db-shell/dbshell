@@ -4,22 +4,14 @@ import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.springframework.core.MethodParameter
 import org.springframework.shell.CompletionContext
 import org.springframework.shell.CompletionProposal
-import org.springframework.shell.standard.ValueProviderSupport
+import org.springframework.shell.standard.ValueProvider
 import org.springframework.stereotype.Component
 import javax.naming.InitialContext
 
 @Component
-class JndiValueProvider: ValueProviderSupport() {
-    override fun supports(parameter: MethodParameter?, completionContext: CompletionContext?): Boolean {
-        val words = completionContext?.words
-        val wordIdx = completionContext?.wordIndex?.minus(1)
-        val word = words?.get(wordIdx!!)
-        return word.equals("--jndi") || word.equals("--context")
-    }
+class JndiValueProvider: ValueProvider {
     override fun complete(
-        parameter: MethodParameter?,
-        completionContext: CompletionContext?,
-        hints: Array<out String>?
+        completionContext: CompletionContext
     ): MutableList<CompletionProposal> {
 
         val currentInput = completionContext?.currentWord()

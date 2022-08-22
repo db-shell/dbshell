@@ -4,15 +4,13 @@ import org.dbshell.results.ResultsHashMap
 import org.springframework.core.MethodParameter
 import org.springframework.shell.CompletionContext
 import org.springframework.shell.CompletionProposal
-import org.springframework.shell.standard.ValueProviderSupport
+import org.springframework.shell.standard.ValueProvider
 import org.springframework.stereotype.Component
 
 @Component
-class JobValueProvider: ValueProviderSupport() {
+class JobValueProvider: ValueProvider {
     override fun complete(
-        parameter: MethodParameter?,
-        completionContext: CompletionContext?,
-        hints: Array<out String>?
+        completionContext: CompletionContext
     ): MutableList<CompletionProposal> {
 
         val currentInput = completionContext?.currentWordUpToCursor()
