@@ -17,10 +17,15 @@ class ContextValueProvider: ValueProvider {
     ): MutableList<CompletionProposal> {
 
         val currentInput = completionContext.currentWordUpToCursor()
-        return JNDIUtils.getAvailableJndiContexts(null)
+
+        val proposals: MutableList<CompletionProposal> =
+
+            JNDIUtils.getAvailableJndiContexts(null)
             .filter{c -> c.contains(currentInput!!)}
             .map{p -> FilenameUtils.removeExtension(File(p).name)}
             .map{cp -> CompletionProposal(cp)}
             .toMutableList()
+
+        return proposals
     }
 }

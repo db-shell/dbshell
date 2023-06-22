@@ -89,13 +89,13 @@ class ExportQueryToCsvTest {
                     .and()
                 .build()
 
-        val connResult = execution?.evaluate(cmdActiveConn, arrayOf("--context", context, "--jndi", jndi))
+        val connResult = execution?.evaluate(arrayOf(connCmd, "--context", context, "--jndi", jndi))
         println(connResult)
 
         val sql = "SELECT * FROM albums"
         val file = "src/test/resources/data/outputData/csvtest.csv"
 
-        val result = execution?.evaluate(cmdSql, arrayOf("--sql", sql, "--output-file", file))
+        val result = execution?.evaluate(arrayOf(commandSql, "--sql", sql, "--output-file", file))
         println(result)
 
     }

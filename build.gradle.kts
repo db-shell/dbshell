@@ -4,11 +4,11 @@ import java.util.Properties
 import org.apache.commons.io.FileUtils
 
 plugins {
-    kotlin("jvm") version "1.8.0"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.8.0"
+    kotlin("jvm") version "1.8.22"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.8.22"
     // Apply the application plugin to add support for building a CLI application.
     id("java-library")
-    id ("com.github.johnrengelman.shadow").version( "7.1.2")
+    id ("com.github.johnrengelman.shadow").version( "8.1.1")
     id ("distribution")
     id("net.researchgate.release").version("3.0.2")
     application
@@ -102,17 +102,17 @@ release {
     var versionPropertyFile = "version.properties"
 }
 
-val log4jVersion = "2.19.0"
-val springVersion = "3.0.0"
-val jacksonVersion = "2.14.2"
-val springBootVersion = "3.0.2"
+val log4jVersion = "2.20.0"
+val springVersion = "3.1.0"
+val jacksonVersion = "2.15.2"
+val springBootVersion = "3.1.1"
 
 dependencies {
 
     api("org.bradfordmiller", "simplejndiutils", "0.0.14") {
         isTransitive = true
     }
-    implementation("us.fatehi:schemacrawler:16.19.7")
+    implementation("us.fatehi:schemacrawler:16.19.11")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion, classifier="sources")
     implementation("org.springframework.boot", "spring-boot-starter", springBootVersion)
     implementation("org.springframework.boot", "spring-boot-starter-test", springBootVersion)
@@ -121,11 +121,11 @@ dependencies {
     implementation("org.apache.logging.log4j",  "log4j-core",  log4jVersion)
     implementation("org.apache.logging.log4j",  "log4j-api",  log4jVersion)
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
-    implementation("org.postgresql", "postgresql", "42.5.1")
-    implementation("org.xerial:sqlite-jdbc:3.40.0.0")
-    implementation("org.jooq", "jooq", "3.17.7")
+    implementation("org.postgresql", "postgresql", "42.6.0")
+    implementation("org.xerial:sqlite-jdbc:3.42.0.0")
+    implementation("org.jooq", "jooq", "3.18.4")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
-    implementation("org.mybatis", "mybatis", "3.5.11")
+    implementation("org.mybatis", "mybatis", "3.5.13")
     implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.40")
     implementation("com.fasterxml.jackson.core", "jackson-core", jacksonVersion)
     implementation("com.fasterxml.jackson.core", "jackson-databind", jacksonVersion)
@@ -134,10 +134,10 @@ dependencies {
     implementation("io.vavr", "vavr-jackson", "0.10.3")
     implementation("io.vavr", "vavr", "0.10.4")
     implementation("com.opencsv:opencsv:5.7.1")
-    implementation("com.amazon.deequ:deequ:2.0.2-spark-3.3")
+    implementation("com.amazon.deequ:deequ:2.0.3-spark-3.3")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.8.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.8.22")
 }
 
 java {
@@ -175,7 +175,7 @@ tasks.withType<ShadowJar> {
 
 application {
     // Define the main class for the application.
-    mainClassName = "org.dbshell.DriverKt"
+    mainClass.set("org.dbshell.DriverKt")
 
     group = "org.dbshell"
     version = getSoftwareVersion()
