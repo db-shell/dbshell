@@ -1,5 +1,6 @@
 package org.dbshell.actions.sql
 
+import org.apache.spark.sql.SparkSession
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.shellmethods.SqlMethods
 import org.jline.console.CommandRegistry
@@ -64,6 +65,18 @@ class ExportQueryToCsvTest {
     @InjectMocks
     private lateinit var shell: Shell
 
+    @Test
+    fun testSpark() {
+
+        val spark =
+            SparkSession
+                .builder()
+                .master("local[2]")
+                .appName("db-shell - query to file")
+                .orCreate
+
+        println(spark)
+    }
 
     @Test
     fun testExportTooCsv() {
