@@ -137,7 +137,7 @@ dependencies {
     implementation("com.amazon.deequ:deequ:2.0.4-spark-3.3")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.10")
 }
 
 java {
@@ -154,7 +154,14 @@ configurations {
     }
 }
 
+val patchArgs = listOf("--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED")
+
+tasks.compileTestJava {
+    options.compilerArgs.addAll(patchArgs)
+}
+
 tasks.test {
+    jvmArgs(patchArgs)
     useJUnit()
 }
 
