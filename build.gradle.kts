@@ -4,8 +4,8 @@ import java.util.Properties
 import org.apache.commons.io.FileUtils
 
 plugins {
-    kotlin("jvm") version "1.9.0"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.9.0"
+    kotlin("jvm") version "1.9.10"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.9.10"
     // Apply the application plugin to add support for building a CLI application.
     id("java-library")
     id ("com.github.johnrengelman.shadow").version( "8.1.1")
@@ -103,16 +103,16 @@ release {
 }
 
 val log4jVersion = "2.20.0"
-val springVersion = "3.1.2"
+val springVersion = "3.1.3"
 val jacksonVersion = "2.15.2"
-val springBootVersion = "3.1.1"
+val springBootVersion = "3.1.3"
 
 dependencies {
 
     api("org.bradfordmiller", "simplejndiutils", "0.0.14") {
         isTransitive = true
     }
-    implementation("us.fatehi:schemacrawler:16.20.1")
+    implementation("us.fatehi:schemacrawler:16.20.4")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion, classifier="sources")
     implementation("org.springframework.boot", "spring-boot-starter", springBootVersion)
     implementation("org.springframework.boot", "spring-boot-starter-test", springBootVersion)
@@ -122,8 +122,8 @@ dependencies {
     implementation("org.apache.logging.log4j",  "log4j-api",  log4jVersion)
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
     implementation("org.postgresql", "postgresql", "42.6.0")
-    implementation("org.xerial:sqlite-jdbc:3.42.0.0")
-    implementation("org.jooq", "jooq", "3.18.5")
+    implementation("org.xerial:sqlite-jdbc:3.43.0.0")
+    implementation("org.jooq", "jooq", "3.18.6")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
     implementation("org.mybatis", "mybatis", "3.5.13")
     implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.40")
@@ -133,8 +133,8 @@ dependencies {
     implementation("com.leansoft", "bigqueue", "0.7.0")
     implementation("io.vavr", "vavr-jackson", "0.10.3")
     implementation("io.vavr", "vavr", "0.10.4")
-    implementation("com.opencsv:opencsv:5.7.1")
-    implementation("com.amazon.deequ:deequ:2.0.3-spark-3.3")
+    implementation("com.opencsv:opencsv:5.8")
+    implementation("com.amazon.deequ:deequ:2.0.4-spark-3.3")
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.0")
