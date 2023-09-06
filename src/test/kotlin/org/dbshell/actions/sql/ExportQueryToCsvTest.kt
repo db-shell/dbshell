@@ -3,6 +3,7 @@ package org.dbshell.actions.sql
 import org.apache.spark.sql.SparkSession
 import org.dbshell.environment.EnvironmentVars
 import org.dbshell.shellmethods.SqlMethods
+import org.dbshell.shellmethods.dto.ConnectionInfoUtil
 import org.jline.console.CommandRegistry
 import org.junit.Test
 import org.junit.jupiter.api.BeforeEach
@@ -22,7 +23,9 @@ import org.springframework.shell.command.CommandRegistration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.util.ReflectionUtils.findMethod
 import java.io.File
+import java.util.*
 import javax.naming.Context
+import kotlin.collections.ArrayList
 
 
 @RunWith(SpringJUnit4ClassRunner::class)
@@ -66,19 +69,6 @@ class ExportQueryToCsvTest {
     private lateinit var shell: Shell
 
     @Test
-    fun testSpark() {
-
-        val spark =
-            SparkSession
-                .builder()
-                .master("local[2]")
-                .appName("db-shell - query to file")
-                .orCreate
-
-        println(spark)
-    }
-
-    @Test
     fun testExportTooCsv() {
 
         val connCmd = "set-active-connection"
@@ -111,5 +101,55 @@ class ExportQueryToCsvTest {
         val result = execution?.evaluate(arrayOf(commandSql, "--sql", sql, "--output-file", file))
         println(result)
 
+    }
+    @Test
+    fun testSpark() {
+
+        /*Examples
+
+        // Query from MySQL Table
+        val df = spark.read
+            .format("jdbc")
+            .option("url", "jdbc:mysql://localhost:3306/emp")
+            .option("driver", "com.mysql.cj.jdbc.Driver")
+            .option("dbtable", "employee")
+            .option("user", "root")
+            .option("password", "root")
+            .load()
+
+        // Query from MySQL Table
+        df = spark.read
+            .format("jdbc")
+            .option("url", "jdbc:mysql://localhost:3306/emp")
+            .option("driver", "com.mysql.cj.jdbc.Driver")
+            .option("query", "select id,age from employee where gender='M'")
+            .option("user", "root")
+            .option("password", "root")
+            .load()
+
+        df.show()
+         */
+
+        val spark =
+            SparkSession
+                .builder()
+                .master("local[2]")
+                .appName("db-shell - query to file")
+                .orCreate
+
+        val credentials = ConnectionInfoUtil.getCredentialsFromCurrentConnection()
+
+        val connectionProperties = Properties()
+        connectionProperties["user"] = credentials.username
+        connectionProperties["password"] = credentials.password
+
+        val readDf = spark.read().jdbc("jdbc:sqlite:src/test/resources/data/chinook.db", "albums", connectionProperties)
+        readDf
+            .write()
+            .option("header", false)
+            .option("delimiter", "|")
+            .csv("src/test/resources/data/outputData/test.csv")
+
+        println("done")
     }
 }

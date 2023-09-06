@@ -135,6 +135,8 @@ dependencies {
     implementation("io.vavr", "vavr", "0.10.4")
     implementation("com.opencsv:opencsv:5.8")
     implementation("com.amazon.deequ:deequ:2.0.4-spark-3.3")
+    implementation("org.jasypt:jasypt:1.9.3")
+
     api("org.bradfordmiller:sqlutils:0.0.4")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.10")
