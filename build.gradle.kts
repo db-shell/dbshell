@@ -103,9 +103,9 @@ release {
 }
 
 val log4jVersion = "2.20.0"
-val springVersion = "3.1.3"
+val springVersion = "3.1.4"
 val jacksonVersion = "2.15.2"
-val springBootVersion = "3.1.3"
+val springBootVersion = "3.1.4"
 
 dependencies {
 
@@ -123,7 +123,7 @@ dependencies {
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
     implementation("org.postgresql", "postgresql", "42.6.0")
     implementation("org.xerial:sqlite-jdbc:3.43.0.0")
-    implementation("org.jooq", "jooq", "3.18.6")
+    implementation("org.jooq", "jooq", "3.18.7")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
     implementation("org.mybatis", "mybatis", "3.5.13")
     implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.40")
