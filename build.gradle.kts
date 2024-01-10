@@ -103,9 +103,9 @@ release {
 }
 
 val log4jVersion = "2.22.1"
-val springVersion = "3.2.1"
+val springVersion = "3.2.0"
 val jacksonVersion = "2.16.1"
-val springBootVersion = "3.1.4"
+val springBootVersion = "3.2.1"
 
 dependencies {
 
