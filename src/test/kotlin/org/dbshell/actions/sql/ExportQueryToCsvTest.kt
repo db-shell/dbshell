@@ -23,9 +23,12 @@ import org.springframework.shell.command.CommandRegistration
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 import org.springframework.util.ReflectionUtils.findMethod
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.*
 import javax.naming.Context
 import kotlin.collections.ArrayList
+import kotlin.io.path.exists
 
 
 @RunWith(SpringJUnit4ClassRunner::class)
@@ -105,6 +108,9 @@ class ExportQueryToCsvTest {
     @Test
     fun testSpark() {
 
+        val outputFile = Paths.get("src/test/resources/data/outputData/test.csv")
+        if(outputFile.exists())
+            Files.deleteIfExists(outputFile)
         /*Examples
 
         // Query from MySQL Table
