@@ -4,8 +4,8 @@ import java.util.Properties
 import org.apache.commons.io.FileUtils
 
 plugins {
-    kotlin("jvm") version "1.9.22"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.9.22"
+    kotlin("jvm") version "1.9.23"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.9.23"
     // Apply the application plugin to add support for building a CLI application.
     id("java-library")
     id ("com.github.johnrengelman.shadow").version( "8.1.1")
@@ -102,17 +102,17 @@ release {
     var versionPropertyFile = "version.properties"
 }
 
-val log4jVersion = "2.22.1"
-val springVersion = "3.2.0"
-val jacksonVersion = "2.16.1"
-val springBootVersion = "3.2.1"
+val log4jVersion = "2.23.1"
+val springVersion = "3.2.3"
+val jacksonVersion = "2.17.0"
+val springBootVersion = "3.2.4"
 
 dependencies {
 
     api("org.bradfordmiller", "simplejndiutils", "0.0.14") {
         isTransitive = true
     }
-    implementation("us.fatehi:schemacrawler:16.20.8")
+    implementation("us.fatehi:schemacrawler:16.21.2")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion, classifier="sources")
     implementation("org.springframework.boot", "spring-boot-starter", springBootVersion)
     implementation("org.springframework.boot", "spring-boot-starter-test", springBootVersion)
@@ -121,12 +121,12 @@ dependencies {
     implementation("org.apache.logging.log4j",  "log4j-core",  log4jVersion)
     implementation("org.apache.logging.log4j",  "log4j-api",  log4jVersion)
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
-    implementation("org.postgresql", "postgresql", "42.7.1")
-    implementation("org.xerial:sqlite-jdbc:3.44.1.0")
-    implementation("org.jooq", "jooq", "3.19.1")
+    implementation("org.postgresql", "postgresql", "42.7.3")
+    implementation("org.xerial:sqlite-jdbc:3.45.2.0")
+    implementation("org.jooq", "jooq", "3.19.6")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
     implementation("org.mybatis", "mybatis", "3.5.15")
-    implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.41")
+    implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.42")
     implementation("com.fasterxml.jackson.core", "jackson-core", jacksonVersion)
     implementation("com.fasterxml.jackson.core", "jackson-databind", jacksonVersion)
     implementation("com.fasterxml.jackson.module", "jackson-module-kotlin", jacksonVersion)
@@ -139,7 +139,7 @@ dependencies {
 
     api("org.bradfordmiller:sqlutils:0.0.4")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.22")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.23")
 }
 
 java {
