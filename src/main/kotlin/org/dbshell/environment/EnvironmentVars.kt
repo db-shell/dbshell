@@ -8,6 +8,16 @@ object EnvironmentVars {
             return ContextAndJndi(envContext, envJndi)
         }
 
+    val currentConnectionName: String
+        get() {
+            val conn = System.getProperty("currentConnectionName")
+            return conn
+        }
+
+    fun currentConnectionName(name: String?) {
+        if(name != null) System.setProperty("currentConnectionName", name)
+    }
+
     fun currentContextAndJndi(context: String?, jndi: String?) {
         if (context != null) System.setProperty("currentContext", context)
         if (jndi != null) System.setProperty("currentJndi", jndi)

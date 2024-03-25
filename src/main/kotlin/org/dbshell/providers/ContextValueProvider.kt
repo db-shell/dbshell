@@ -1,16 +1,13 @@
 package org.dbshell.providers
 
-import org.apache.commons.io.FilenameUtils
-import org.bradfordmiller.simplejndiutils.JNDIUtils
-import org.springframework.core.MethodParameter
+import org.dbshell.connections.ConnectionRepository
 import org.springframework.shell.CompletionContext
 import org.springframework.shell.CompletionProposal
 import org.springframework.shell.standard.ValueProvider
 import org.springframework.stereotype.Component
-import java.io.File
 
 @Component
-class ContextValueProvider: ValueProvider {
+class ConnectionValueProvider: ValueProvider {
 
     override fun complete(
         completionContext: CompletionContext
@@ -20,10 +17,9 @@ class ContextValueProvider: ValueProvider {
 
         val proposals: MutableList<CompletionProposal> =
 
-            JNDIUtils.getAvailableJndiContexts(null)
-            .filter{c -> c.contains(currentInput!!)}
-            .map{p -> FilenameUtils.removeExtension(File(p).name)}
-            .map{cp -> CompletionProposal(cp)}
+            ConnectionRepository.loadAllConnections()
+            .filter{c -> c.key.contains(currentInput!!)}
+            .map{cp -> CompletionProposal(cp.key)}
             .toMutableList()
 
         return proposals

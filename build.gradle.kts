@@ -109,9 +109,6 @@ val springBootVersion = "3.2.4"
 
 dependencies {
 
-    api("org.bradfordmiller", "simplejndiutils", "0.0.14") {
-        isTransitive = true
-    }
     implementation("us.fatehi:schemacrawler:16.21.2")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion, classifier="sources")
     implementation("org.springframework.boot", "spring-boot-starter", springBootVersion)
@@ -135,7 +132,6 @@ dependencies {
     implementation("io.vavr", "vavr", "0.10.4")
     implementation("com.opencsv:opencsv:5.9")
     implementation("com.amazon.deequ:deequ:2.0.6-spark-3.4")
-    implementation("org.jasypt:jasypt:1.9.3")
 
     api("org.bradfordmiller:sqlutils:0.0.4")
 

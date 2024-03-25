@@ -1,12 +1,11 @@
 package org.dbshell.shellmethods
 
-import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.dbshell.actions.ActionExecutor
 import org.dbshell.actions.jndi.GetEntries
+import org.dbshell.connections.ConnectionRepository
 import org.dbshell.environment.EnvironmentProps
 import org.dbshell.environment.EnvironmentVars
-import org.dbshell.providers.ContextValueProvider
-import org.dbshell.providers.JndiValueProvider
+import org.dbshell.providers.ConnectionValueProvider
 import org.slf4j.LoggerFactory
 import org.springframework.shell.standard.*
 import javax.naming.InitialContext
@@ -14,62 +13,50 @@ import javax.naming.InitialContext
 import java.util.*
 
 @ShellComponent
-class JndiMethods: ActionExecutor {
-
-    data class JndiEntries(val key: String, val value: String)
+class ConnectionMethods: ActionExecutor {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(JndiMethods::class.java)
+        private val logger = LoggerFactory.getLogger(ConnectionMethods::class.java)
     }
 
     @ShellMethod("Add Database Connection")
     fun addConnection(
-        jndi: String,
-        @ShellOption(valueProvider = ContextValueProvider::class) context: String,
+        name: String,
         url: String,
-        driver: String,
         user: String,
         password: String
     ) {
 
-        val params = HashMap<String, String>()
-        params["type"] = "javax.sql.DataSource"
-        params["url"] = url
-        params["driver"] = driver
-        params["user"] = user
-        params["password"] = password
-
         try {
-            val success = JNDIUtils.addJndiConnection(jndi, context, params)
-            if (success) {
+            val success = ConnectionRepository.addConnection(name, url, user, password)  //JNDIUtils.addJndiConnection(jndi, context, params)
+            if (success > 0) {
                 logger.info(
-                    "Jndi entry $jndi for context $context successfully added.".trimMargin()
+                    "Connection entry $name was successfully added.".trimMargin()
                 )
             } else {
-                logger.error("There was error entering jndi entry. Please check the log.")
+                logger.error("There was error entering connection entry. Please check the log.")
             }
         } catch (e: Exception) {
-            logger.error("Exception occurred while adding jndi entry: ${e.message}")
+            logger.error("Exception occurred while adding connection entry: ${e.message}")
             throw e
         }
     }
 
-    @ShellMethod("List database entries from a context")
+    @ShellMethod("List database entries")
     fun listEntries(
-        @ShellOption(valueProvider = ContextValueProvider::class) context: String,
         @ShellOption(defaultValue = "false") executeAsync: Boolean
     ) {
         try {
-            val getEntries = GetEntries(context)
+            val getEntries = GetEntries()
             val result = executeAction(getEntries, executeAsync)
             renderResult(result)
         } catch(e: Exception) {
-            logger.error("Error when accessing entries for context $context: ${e.message}")
+            logger.error("Error when accessing database entries: ${e.message}")
             throw e
         }
     }
 
-    @ShellMethod("Get details for a context and jndi")
+    /*@ShellMethod("Get details for a context and jndi")
     fun getDetails(
         @ShellOption(valueProvider = ContextValueProvider::class) context: String,
         @ShellOption(valueProvider = JndiValueProvider::class) jndi: String
@@ -82,15 +69,15 @@ class JndiMethods: ActionExecutor {
             logger.error("Error when getting details for context $context and jndi $jndi: ${e.message}")
             throw e
         }
-    }
+    }*/
 
     @ShellMethod("Set the current active shell connection with a context and jndi")
     fun setActiveConnection(
-        @ShellOption(valueProvider = ContextValueProvider::class) context: String,
-        @ShellOption(valueProvider = JndiValueProvider::class) jndi: String
+        @ShellOption(valueProvider = ConnectionValueProvider::class) name: String
     ) {
-        EnvironmentVars.currentContextAndJndi(context, jndi)
-        EnvironmentProps.setCurrentContextandJndi(context, jndi)
+        //EnvironmentVars.currentContextAndJndi(context, jndi)
+        //EnvironmentProps.setCurrentContextandJndi(context, jndi)
+        EnvironmentVars.currentConnectionName
         EnvironmentVars.currentCatalog = ""
         EnvironmentProps.setCurrentCatalog("")
         EnvironmentVars.currentSchema = ""

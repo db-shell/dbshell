@@ -1,4 +1,4 @@
-package org.dbshell.providers
+/*package org.dbshell.providers
 
 import org.bradfordmiller.simplejndiutils.JNDIUtils
 import org.springframework.shell.CompletionContext
@@ -36,4 +36,4 @@ class JndiValueProvider: ValueProvider {
 
         return proposals
     }
-}
+}*/
