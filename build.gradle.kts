@@ -4,8 +4,8 @@ import java.util.Properties
 import org.apache.commons.io.FileUtils
 
 plugins {
-    kotlin("jvm") version "1.9.23"
-    id("org.jetbrains.kotlin.plugin.spring") version "1.9.23"
+    kotlin("jvm") version "2.0.10"
+    id("org.jetbrains.kotlin.plugin.spring") version "2.0.10"
     // Apply the application plugin to add support for building a CLI application.
     id("java-library")
     id ("com.github.johnrengelman.shadow").version( "8.1.1")
@@ -103,13 +103,13 @@ release {
 }
 
 val log4jVersion = "2.23.1"
-val springVersion = "3.2.3"
-val jacksonVersion = "2.17.0"
-val springBootVersion = "3.2.4"
+val springVersion = "3.3.1"
+val jacksonVersion = "2.17.2"
+val springBootVersion = "3.3.2"
 
 dependencies {
 
-    implementation("us.fatehi:schemacrawler:16.21.2")
+    implementation("us.fatehi:schemacrawler:16.22.2")
     implementation("org.springframework.shell", "spring-shell-starter", springVersion, classifier="sources")
     implementation("org.springframework.boot", "spring-boot-starter", springBootVersion)
     implementation("org.springframework.boot", "spring-boot-starter-test", springBootVersion)
@@ -119,10 +119,10 @@ dependencies {
     implementation("org.apache.logging.log4j",  "log4j-api",  log4jVersion)
     implementation("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
     implementation("org.postgresql", "postgresql", "42.7.3")
-    implementation("org.xerial:sqlite-jdbc:3.45.2.0")
-    implementation("org.jooq", "jooq", "3.19.6")
+    implementation("org.xerial:sqlite-jdbc:3.46.0.1")
+    implementation("org.jooq", "jooq", "3.19.10")
     implementation("com.github.mnadeem", "sql-table-name-parser", "0.0.5")
-    implementation("org.mybatis", "mybatis", "3.5.15")
+    implementation("org.mybatis", "mybatis", "3.5.16")
     implementation("net.sourceforge.csvjdbc:csvjdbc:1.0.42")
     implementation("com.fasterxml.jackson.core", "jackson-core", jacksonVersion)
     implementation("com.fasterxml.jackson.core", "jackson-databind", jacksonVersion)
@@ -131,11 +131,11 @@ dependencies {
     implementation("io.vavr", "vavr-jackson", "0.10.3")
     implementation("io.vavr", "vavr", "0.10.4")
     implementation("com.opencsv:opencsv:5.9")
-    implementation("com.amazon.deequ:deequ:2.0.6-spark-3.4")
+    implementation("com.amazon.deequ:deequ:2.0.7-spark-3.5")
 
     api("org.bradfordmiller:sqlutils:0.0.4")
 
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:1.9.23")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:2.0.10")
 }
 
 java {
